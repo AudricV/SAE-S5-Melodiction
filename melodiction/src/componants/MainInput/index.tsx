@@ -5,12 +5,11 @@ import "@fontsource/poppins"; // Defaults to weight 400
 //Le composant à 100% dans la case où il est placé
 
 const inputStyle: CSSProperties = {
-  width: '100%',
-  padding: '10px',
-  fontSize: '16px',
+  padding: '1rem',
+  fontSize: '1rem',
   fontFamily: "Poppins",
-  border: '1px solid #ccc',
-  borderRadius: '10px',
+  border: '0.3rem solid #ccc',
+  borderRadius: '0.7rem',
 };
 
 function MyTextField() {
@@ -21,7 +20,7 @@ function MyTextField() {
   };
 
   return (
-    <div style={{ margin: '20px' }}>
+    <div style={{ margin: '2rem' }}>
       <input
         type="text"
         placeholder="Saisissez votre message à transformer !"
