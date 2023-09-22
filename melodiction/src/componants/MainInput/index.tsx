@@ -2,8 +2,6 @@ import React, { useState, CSSProperties } from 'react';
 
 import "@fontsource/poppins"; // Defaults to weight 400
 
-//Le composant à 100% dans la case où il est placé
-
 const inputStyle: CSSProperties = {
   padding: '1rem',
   fontSize: '1rem',
