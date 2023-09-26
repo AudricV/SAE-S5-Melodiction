@@ -1,17 +1,11 @@
 import React from 'react';
 import './App.css';
 // @ts-ignore
-import MainInput from './componants/MainInput/index.tsx';
-
-
+import MainPage from './pages/Main/main';
 
 function App() {
   return (
-    <div className="App">
-      <body>
-        <MainInput />
-      </body>
-    </div>
+    <MainPage/>
   );
 }
 
