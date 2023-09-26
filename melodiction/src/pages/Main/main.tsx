@@ -1,10 +1,10 @@
 // @ts-ignore
-import Main from '../../componants/MainInput/index'
 import SideBar from '../../componants/SideBar/index'
+import PageMain from './Components';
 
 export default function MainPage() {
 
-    const renderComponent = () => <Main/>;
+    const renderComponent = () => <PageMain />;
 
     return (
         <SideBar renderComponent={renderComponent} />
