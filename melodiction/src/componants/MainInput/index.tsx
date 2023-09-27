@@ -1,8 +1,11 @@
-import React, { useState, CSSProperties } from 'react';
-
+import React, { useState } from 'react';
 import "@fontsource/poppins"; // Defaults to weight 400
 
-const inputStyle: CSSProperties = {
+interface MyTextFieldProps {
+  onTextChange: (text: string) => void;
+}
+
+const inputStyle = {
   padding: '1rem',
   fontSize: '1rem',
   fontFamily: "Poppins",
@@ -10,11 +13,13 @@ const inputStyle: CSSProperties = {
   borderRadius: '0.7rem',
 };
 
-function MyTextField() {
+function MyTextField({ onTextChange }: MyTextFieldProps) {
   const [text, setText] = useState<string>('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setText(event.target.value);
+    const newText = event.target.value;
+    setText(newText);
+    onTextChange(newText);
   };
 
   return (
