@@ -23,7 +23,6 @@ function MyTextField({ onTextChange }: MyTextFieldProps) {
   };
 
   return (
-    <div style={{ margin: '2rem' }}>
       <input
         type="text"
         placeholder="Saisissez votre message à transformer !"
@@ -31,7 +30,6 @@ function MyTextField({ onTextChange }: MyTextFieldProps) {
         onChange={handleChange}
         style={inputStyle}
       />
-    </div>
   );
 }
 

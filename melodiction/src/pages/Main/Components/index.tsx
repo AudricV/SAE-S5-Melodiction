@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import CssBaseline from '@mui/material/CssBaseline';
+import { Stack } from '@mui/material';
 
 
 function PageMain(props: any) {
@@ -29,9 +30,8 @@ function PageMain(props: any) {
                     overflow: 'auto',
                 }}
             >
-                <Grid container spacing={3} paddingBottom={10} paddingLeft={10} paddingRight={10}>
+                <Stack spacing={3} paddingBottom={10} paddingLeft={10} paddingRight={10} height={'100%'} justifyContent={'space-between'}>
 
-                    <Grid item xs={12} md={12} marginTop={3}>
                         <Paper
                             sx={{
                                 padding: '1rem',
@@ -41,27 +41,19 @@ function PageMain(props: any) {
                                 Texte entré: {inputText}
                             </p>
                         </Paper>
-                    </Grid>
 
-                    <Grid item xs={12} md={12}>
                         <Paper
                             sx={{
-                                position: 'fixed',
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                padding: '1rem',
+                                display:'flex',
                                 backgroundColor: 'transparent',
-                                borderTop: '1px solid #ccc',
-                                display: 'flex',
-                                justifyContent: 'center',
+                                justifyContent:'center',
+                                padding: '1rem',
                             }}
                         >
                             <MyTextField onTextChange={handleTextChange} />
                         </Paper>
-                    </Grid>
 
-                </Grid>
+                </Stack>
             </Box>
         </Box>
     );

@@ -32,7 +32,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         }),
         width: theme.spacing(7),
         [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
+          width: theme.spacing(8),
         },
       }),
     },
@@ -40,6 +40,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const defaultTheme = createTheme();
+
+
 
 export default function Home({ renderComponent }: { renderComponent: () => JSX.Element }) {
   const isDrawerOpen = localStorage.getItem('stateDrawer');
@@ -54,7 +56,7 @@ export default function Home({ renderComponent }: { renderComponent: () => JSX.E
       <Box
         sx={{
           display: 'flex',
-          backgroundColor: '#31373E', 
+          backgroundColor: '#31373E',
         }}
       >
         <CssBaseline />
@@ -74,8 +76,8 @@ export default function Home({ renderComponent }: { renderComponent: () => JSX.E
           <Divider />
           <List component="nav">
             {mainListItems}
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
+              <Divider />
+              {secondaryListItems}
           </List>
         </Drawer>
 
