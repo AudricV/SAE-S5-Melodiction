@@ -7,7 +7,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HelpIcon from '@mui/icons-material/Help';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import AddIcon from '@mui/icons-material/Add';
-import { Divider } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
+import { useState } from 'react';
 
 interface Props {
   id: string;
@@ -20,53 +21,64 @@ const listMelody: Props[] = [
   { id: '3', name: 'Mélodie 3' },
 ];
 
-const listMelodyItems = listMelody.map((melody) =>
-  <ListItemButton key={melody.id}>
-    <ListItemIcon>
-      <MusicNoteIcon />
-    </ListItemIcon>
-    <ListItemText primary={melody.name} />
-  </ListItemButton>
-);
+const MainListItems = () => {
+  const [melodyCounter, setMelodyCounter] = useState(listMelody.length + 1);
 
-export const mainListItems = (
-  <React.Fragment>
-    <ListItemButton >
+  const addNewMelody = () => {
+    const newMelody = {
+      id: melodyCounter.toString(),
+      name: 'Mélodie ' + melodyCounter,
+    };
+
+    listMelody.push(newMelody);
+    setMelodyCounter(melodyCounter + 1);
+    console.log(listMelody);
+  };
+
+  const listMelodyItems = listMelody.map((melody) => (
+    <ListItemButton key={melody.id}>
       <ListItemIcon>
-        <AddIcon />
+        <MusicNoteIcon />
       </ListItemIcon>
-      <ListItemText primary="Nouvelle mélodie" />
+      <ListItemText primary={melody.name} />
     </ListItemButton>
+  ));
 
-    <Divider />
+  return (
+    <React.Fragment>
+      <ListItemButton onClick={addNewMelody}>
+        <ListItemIcon>
+          <AddIcon />
+        </ListItemIcon>
+        <ListItemText primary="Nouvelle mélodie" />
+      </ListItemButton>
 
-    <ListSubheader component="div" inset>
-      HISTORIQUE
-    </ListSubheader>
+      <Divider />
 
-    {listMelodyItems}
+      <ListSubheader component="div" inset>
+        HISTORIQUE
+      </ListSubheader>
 
-  </React.Fragment>
-);
+      {listMelodyItems}
 
-export const secondaryListItems = (
-  <React.Fragment>
-    <ListSubheader component="div" inset>
-      AUTRES
-    </ListSubheader>
+      <Divider />
 
-    <ListItemButton>
-      <ListItemIcon>
-        <SettingsIcon />
-      </ListItemIcon>
-      <ListItemText primary="Paramètres" />
-    </ListItemButton>
+      <ListItemButton>
+        <ListItemIcon>
+          <SettingsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Paramètres" />
+      </ListItemButton>
 
-    <ListItemButton>
-      <ListItemIcon>
-        <HelpIcon />
-      </ListItemIcon>
-      <ListItemText primary="Aide" />
-    </ListItemButton>
-  </React.Fragment>
-);
+      <ListItemButton>
+        <ListItemIcon>
+          <HelpIcon />
+        </ListItemIcon>
+        <ListItemText primary="Aide" />
+      </ListItemButton>
+
+    </React.Fragment>
+  );
+};
+
+export default MainListItems;

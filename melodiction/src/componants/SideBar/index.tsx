@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { mainListItems, secondaryListItems } from './ListItems/listItems';
+import MainListItems from './ListItems/listItems';
 
 const drawerWidth: number = 240;
 
@@ -75,10 +75,8 @@ export default function Home({ renderComponent }: { renderComponent: () => JSX.E
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
-              <Divider />
-              {secondaryListItems}
-          </List>
+            <MainListItems/>
+            </List>
         </Drawer>
 
         <Box
