@@ -76,7 +76,7 @@ export default function Home({ renderComponent }: { renderComponent: () => JSX.E
           <Divider />
           <List component="nav">
             <MainListItems/>
-            </List>
+          </List>
         </Drawer>
 
         <Box

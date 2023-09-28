@@ -22,17 +22,16 @@ const listMelody: Props[] = [
 ];
 
 const MainListItems = () => {
-  const [melodyCounter, setMelodyCounter] = useState(listMelody.length + 1);
+  const [melodyCount, setMelodyCount] = useState(listMelody.length + 1);
 
   const addNewMelody = () => {
     const newMelody = {
-      id: melodyCounter.toString(),
-      name: 'Mélodie ' + melodyCounter,
+      id: melodyCount.toString(),
+      name: 'Mélodie ' + melodyCount,
     };
 
     listMelody.push(newMelody);
-    setMelodyCounter(melodyCounter + 1);
-    console.log(listMelody);
+    setMelodyCount(melodyCount + 1);
   };
 
   const listMelodyItems = listMelody.map((melody) => (
