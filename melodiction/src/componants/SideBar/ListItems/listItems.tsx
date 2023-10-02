@@ -7,7 +7,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HelpIcon from '@mui/icons-material/Help';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import AddIcon from '@mui/icons-material/Add';
-import { Divider, Stack } from '@mui/material';
+import { Divider } from '@mui/material';
 import { useState } from 'react';
 
 interface Props {
@@ -22,16 +22,17 @@ const listMelody: Props[] = [
 ];
 
 const MainListItems = () => {
-  const [melodyCount, setMelodyCount] = useState(listMelody.length + 1);
+  const [melodyCount, setMelodyCount] = useState(listMelody.length);
 
   const addNewMelody = () => {
+    const newMelodyCount = melodyCount + 1;
     const newMelody = {
-      id: melodyCount.toString(),
-      name: 'Mélodie ' + melodyCount,
+      id: newMelodyCount.toString(),
+      name: 'Mélodie ' + newMelodyCount,
     };
 
     listMelody.push(newMelody);
-    setMelodyCount(melodyCount + 1);
+    setMelodyCount(newMelodyCount);
   };
 
   const listMelodyItems = listMelody.map((melody) => (
