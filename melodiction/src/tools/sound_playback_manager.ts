@@ -119,10 +119,10 @@ export class SoundPlaybackManager {
      */
     private stopPlayback() : void {
         Tone.Transport.cancel()
-        Tone.Transport.stop();
         if (this.currentSequence != null) {
             this.currentSequence.stop();
         }
+        Tone.Transport.stop();
     }
 
     /**
