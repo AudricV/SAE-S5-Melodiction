@@ -1,12 +1,22 @@
 import * as Tone from 'tone';
 import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument';
+import { convertLetterToNote } from './char_converter';
+
+/**
+ * Types of synths.
+ */
+export enum SynthType {
+    SYNTH
+    // TODO: add other synth types when we will use them
+}
 
 /**
  * A class managing all synths used and playback of notes.
  */
-class SoundPlaybackManager {
+export class SoundPlaybackManager {
     private synths: Map<SynthType, Instrument<InstrumentOptions>>;
     private selectedSynthType: SynthType;
+    private currentSequence: Tone.Sequence | null = null;
 
     /**
      * Constructs a new {@link SoundPlaybackManager} instance.
@@ -18,17 +28,42 @@ class SoundPlaybackManager {
     }
 
     /**
-     * Play a given note in the given time.
+     * Play a given text with the given time interval between each note.
      *
-     * @param note - the name of the note
-     * @param noteDuration - the duration of the note
+     * @param text - the text to play
+     * @param noteDuration - the duration of each note in seconds
      */
-    public playNote(note: string, noteDuration: number) {
-        const now = Tone.now();
+    public playText(text: string, noteDuration: number) {
         const selectedSynth = this.getSelectedSynth();
         if (selectedSynth) {
-            selectedSynth.triggerAttack(note, now);
-            selectedSynth.triggerRelease(now + noteDuration);
+            this.stopPlayback();
+
+            let startTime = 0;
+            const events = [];
+            for (const character of text) {
+                const noteToPlay = convertLetterToNote(character);
+                if (noteToPlay != null) {
+                    events.push({
+                        note: noteToPlay,
+                        beginTime: startTime
+                    });
+                    startTime += noteDuration;
+                }
+            }
+
+            if (events.length === 0) {
+                return;
+            }
+
+            this.currentSequence = new Tone.Sequence({
+                loop: false,
+                callback: (_time, note) => {
+                    selectedSynth.triggerAttackRelease(note.note, noteDuration, Tone.now() + note.beginTime);
+                },
+                events: events
+            });
+
+            this.startPlayback();
         }
     }
 
@@ -63,23 +98,39 @@ class SoundPlaybackManager {
     /**
      * Build the list of synths which can be used.
      */
-    private buildSynths() {
+    private buildSynths() : void {
         const synth = new Tone.Synth().toDestination();
         this.synths.set(SynthType.SYNTH, synth);
-        // TODO: add other synths
+        // TODO: add other synths when we will use them
     }
 
-    private getSelectedSynth() : Instrument<InstrumentOptions> | undefined {
-        return this.synths.get(this.selectedSynthType);
+    /**
+     * Start playback of the current sequence, if there is one.
+     */
+    private startPlayback() : void {
+        if (this.currentSequence != null) {
+            this.currentSequence.start();
+        }
+        Tone.Transport.start();
+    }
+
+    /**
+     * Stop playback of the current sequence playing, if there is one.
+     */
+    private stopPlayback() : void {
+        Tone.Transport.cancel()
+        Tone.Transport.stop();
+        if (this.currentSequence != null) {
+            this.currentSequence.stop();
+        }
+    }
+
+    /**
+     * Get the selected synth.
+     *
+     * @returns the selected synth
+     */
+    private getSelectedSynth() : Instrument<InstrumentOptions> | null {
+        return this.synths.get(this.selectedSynthType) || null;
     }
 }
-
-/**
- * Types of synths.
- */
-export enum SynthType {
-    SYNTH
-    // TODO: add other synth types
-}
-
-export default SoundPlaybackManager;
