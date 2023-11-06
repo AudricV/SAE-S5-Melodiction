@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import "@fontsource/poppins"; // Defaults to weight 400
 import { Tooltip } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 
 interface MyTextFieldProps {
   onTextChange: (text: string) => void;
@@ -32,11 +33,14 @@ export function ButtonMyTextField({ onButtonClick }: ButtonMyTextFieldProps) {
           fontFamily: "Poppins",
           border: '0.1rem solid #ccc',
           borderRadius: '0.7rem',
-
         }}
         onClick={onButtonClick}
       >
-        {'>'}
+        <SendIcon style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          display: 'flex',
+        }}/>
       </button>
     </Tooltip>
   );
