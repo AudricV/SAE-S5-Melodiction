@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import MyTextField from '../../../componants/MainInput';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Stack } from '@mui/material';
 
@@ -32,27 +31,26 @@ function PageMain(props: any) {
             >
                 <Stack spacing={3} paddingBottom={10} paddingLeft={10} paddingRight={10} height={'100%'} justifyContent={'space-between'}>
 
-                        <Paper
-                            sx={{
-                                padding: '1rem',
-                            }}
-                        >
-                            <p>
-                                Texte entré: {inputText}
-                            </p>
-                        </Paper>
+                    <Paper
+                        sx={{
+                            padding: '1rem',
+                        }}
+                    >
+                        <p>
+                            Texte entré: {inputText}
+                        </p>
+                    </Paper>
 
-                        <Paper
-                            sx={{
-                                display:'flex',
-                                backgroundColor: 'transparent',
-                                justifyContent:'center',
-                                padding: '1rem',
-                            }}
-                        >
-                            <MyTextField onTextChange={handleTextChange} />
-                        </Paper>
-
+                    <Paper
+                        sx={{
+                            display: 'flex',
+                            backgroundColor: 'transparent',
+                            justifyContent: 'center',
+                            padding: '1rem',
+                        }}
+                    >
+                        <MyTextField onTextChange={handleTextChange} />
+                    </Paper>
                 </Stack>
             </Box>
         </Box>
