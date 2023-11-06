@@ -39,9 +39,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const defaultTheme = createTheme();
-
-
+const defaultTheme = createTheme({
+  typography: {
+    fontFamily: 'Poppins',
+  },
+});
 
 export default function Home({ renderComponent }: { renderComponent: () => JSX.Element }) {
   const isDrawerOpen = localStorage.getItem('stateDrawer');
@@ -75,7 +77,7 @@ export default function Home({ renderComponent }: { renderComponent: () => JSX.E
           </Toolbar>
           <Divider />
           <List component="nav">
-            <MainListItems/>
+            <MainListItems />
           </List>
         </Drawer>
 
