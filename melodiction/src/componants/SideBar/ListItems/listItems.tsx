@@ -7,8 +7,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HelpIcon from '@mui/icons-material/Help';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import AddIcon from '@mui/icons-material/Add';
-import { Divider } from '@mui/material';
 import { useState } from 'react';
+import { Divider, List as MuiList } from '@mui/material';
 
 interface Props {
   id: string;
@@ -16,9 +16,14 @@ interface Props {
 }
 
 const listMelody: Props[] = [
-  { id: '1', name: 'Mélodie 1' },
-  { id: '2', name: 'Mélodie 2' },
-  { id: '3', name: 'Mélodie 3' },
+  {
+    id: '1',
+    name: 'Mélodie 1',
+  },
+  {
+    id: '2',
+    name: 'Mélodie',
+  },
 ];
 
 const MainListItems = () => {
@@ -59,7 +64,11 @@ const MainListItems = () => {
         HISTORIQUE
       </ListSubheader>
 
-      {listMelodyItems}
+      <div style={{overflowX: 'hidden'}}>
+        <MuiList style={{ maxHeight: '60vh', overflowY: 'auto', overflowX: 'hidden' }}>
+          {listMelodyItems}
+        </MuiList>
+      </div>
 
       <Divider />
 
