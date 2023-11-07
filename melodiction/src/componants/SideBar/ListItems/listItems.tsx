@@ -64,11 +64,9 @@ const MainListItems = () => {
         HISTORIQUE
       </ListSubheader>
 
-      <div style={{overflowX: 'hidden'}}>
         <MuiList style={{ maxHeight: '60vh', overflowY: 'auto', overflowX: 'hidden' }}>
           {listMelodyItems}
         </MuiList>
-      </div>
 
       <Divider />
 
