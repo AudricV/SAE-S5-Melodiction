@@ -49,15 +49,15 @@ function PageMain(_props: any) {
 
                     <Paper
                         sx={{
-                            position: 'fixed', // Position fixe pour rester en bas de la page
-                            display: 'flex', // Afficher en tant que flexbox
-                            left: 0, // Aligné à gauche
-                            bottom: 0, // Aligné en bas
-                            width: '100%', // Largeur complète
+                            position: 'fixed', 
+                            display: 'flex', 
+                            left: 0, 
+                            bottom: 0, 
+                            width: '100%', 
                             backgroundColor: 'transparent',
                             justifyContent: 'center',
                             padding: '1rem',
-                            zIndex: 1000, // S'assurer qu'il reste au-dessus des autres éléments
+                            zIndex: 1000, // Stay above everything
                         }}
                     >
                         <MyTextField onTextChange={handleTextChange} />
