@@ -1,26 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MyTextField from '../../../componants/MainInput';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Stack } from '@mui/material';
 import { SoundPlaybackManager } from '../../../tools/sound_playback_manager';
+import Melody from '../../../data/melody';
 
 
-function PageMain(_props: any) {
+function PageMain({ melody }: { melody: Melody | null }) {
     const [inputText, setInputText] = useState<string>('');
     const soundPlaybackManager = new SoundPlaybackManager();
 
     const handleTextChange = (text: string) => {
         setInputText(text);
         soundPlaybackManager.playText(text, 0.25);
-
     };
+
+    useEffect(() => {
+        if (melody) {
+            var text = melody.getMelodyText();
+            setInputText(text)
+        }
+    }, [melody]);
 
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-
             <Box
                 component="main"
                 sx={{
@@ -49,11 +55,11 @@ function PageMain(_props: any) {
 
                     <Paper
                         sx={{
-                            position: 'fixed', 
-                            display: 'flex', 
-                            left: 0, 
-                            bottom: 0, 
-                            width: '100%', 
+                            position: 'fixed',
+                            display: 'flex',
+                            left: 0,
+                            bottom: 0,
+                            width: '100%',
                             backgroundColor: 'transparent',
                             justifyContent: 'center',
                             padding: '1rem',
