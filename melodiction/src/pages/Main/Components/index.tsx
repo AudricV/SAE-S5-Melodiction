@@ -41,7 +41,7 @@ function PageMain(_props: any) {
                             overflow: 'auto',
                         }}
                     >
-                        <p style={{ overflow:'auto'}} >
+                        <p style={{ overflow: 'auto' }} >
                             Texte entré: {inputText}
                         </p>
 
@@ -49,10 +49,15 @@ function PageMain(_props: any) {
 
                     <Paper
                         sx={{
-                            display: 'flex',
+                            position: 'fixed', 
+                            display: 'flex', 
+                            left: 0, 
+                            bottom: 0, 
+                            width: '100%', 
                             backgroundColor: 'transparent',
                             justifyContent: 'center',
                             padding: '1rem',
+                            zIndex: 1000, // Stay above everything
                         }}
                     >
                         <MyTextField onTextChange={handleTextChange} />
