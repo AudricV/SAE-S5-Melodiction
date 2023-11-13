@@ -8,9 +8,10 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HelpIcon from '@mui/icons-material/Help';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Melody from '../../../data/melody';
 import { useState } from 'react';
-import { Divider, List as MuiList } from '@mui/material';
+import { Divider, List as MuiList, Tooltip } from '@mui/material';
 
 
 const listMelody = [
@@ -22,6 +23,7 @@ const MainListItems = () => {
   const navigate = useNavigate();
 
   const [melodyCount, setMelodyCount] = useState(listMelody.length);
+  const [hoveredMelodyId, setHoveredMelodyId] = useState('' as string | null);
 
   const addNewMelody = () => {
 
@@ -32,21 +34,38 @@ const MainListItems = () => {
       'rzijfeoai',
       new Date().getUTCMilliseconds()
     );
-  
-    listMelody.push(newMelody); 
+
+    listMelody.push(newMelody);
     setMelodyCount(newMelodyCount);
   };
 
   const listMelodyItems = listMelody.map((melody) => (
-      <ListItemButton key={melody.getId()} onClick={() => {
-        navigate("/", {state: {melody} });
+    <ListItemButton key={melody.getId()}
+      onMouseEnter={() => setHoveredMelodyId(melody.getId())}
+      onMouseLeave={() => setHoveredMelodyId(null)}
+      onClick={() => {
+        navigate("/", { state: { melody } });
       }}
-      >
-        <ListItemIcon>
-          <MusicNoteIcon />
+    >
+      <ListItemIcon>
+        <MusicNoteIcon />
+      </ListItemIcon>
+      <ListItemText primary={melody.getName()} />
+      {hoveredMelodyId === melody.getId() && (
+        <ListItemIcon
+          style={{ justifyContent: 'flex-end' }}
+          onClick={(event) => {
+            event.stopPropagation();
+            listMelody.splice(listMelody.indexOf(melody), 1);
+            setMelodyCount(melodyCount - 1);
+          }}
+        >
+          <Tooltip title="Supprimer la mélodie">
+            <DeleteIcon />
+          </Tooltip>
         </ListItemIcon>
-        <ListItemText primary={melody.getName()} />
-      </ListItemButton>
+      )}
+    </ListItemButton>
   ));
 
   return (
