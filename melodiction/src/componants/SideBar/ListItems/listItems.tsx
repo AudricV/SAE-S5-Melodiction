@@ -23,6 +23,7 @@ const MainListItems = () => {
   const navigate = useNavigate();
 
   const [melodyCount, setMelodyCount] = useState(listMelody.length);
+  const [hoveredMelodyId, setHoveredMelodyId] = useState('' as string | null);
 
   const addNewMelody = () => {
 
@@ -39,25 +40,31 @@ const MainListItems = () => {
   };
 
   const listMelodyItems = listMelody.map((melody) => (
-    <ListItemButton key={melody.getId()} onClick={() => {
-      navigate("/", { state: { melody } });
-    }}
+    <ListItemButton key={melody.getId()}
+      onMouseEnter={() => setHoveredMelodyId(melody.getId())}
+      onMouseLeave={() => setHoveredMelodyId(null)}
+      onClick={() => {
+        navigate("/", { state: { melody } });
+      }}
     >
       <ListItemIcon>
         <MusicNoteIcon />
       </ListItemIcon>
       <ListItemText primary={melody.getName()} />
-      <Tooltip title="Supprimer la mélodie">
-        <ListItemIcon style={{ justifyContent: 'flex-end' }} onClick={
-          (event) => {
-            event.stopPropagation();
-            listMelody.splice(listMelody.indexOf(melody), 1);
-            setMelodyCount(melodyCount - 1);
-          }
-        }>
-          <DeleteIcon />
-        </ListItemIcon>
-      </Tooltip>
+      {hoveredMelodyId === melody.getId() && (
+          <Tooltip title="Supprimer la mélodie">
+            <ListItemIcon 
+              style={{ justifyContent: 'flex-end' }} 
+              onClick={(event) => {
+                event.stopPropagation();
+                listMelody.splice(listMelody.indexOf(melody), 1);
+                setMelodyCount(melodyCount - 1);
+              }}
+            >
+              <DeleteIcon />
+            </ListItemIcon>
+          </Tooltip>
+        )}
     </ListItemButton>
   ));
 
