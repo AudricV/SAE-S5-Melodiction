@@ -52,19 +52,19 @@ const MainListItems = () => {
       </ListItemIcon>
       <ListItemText primary={melody.getName()} />
       {hoveredMelodyId === melody.getId() && (
+        <ListItemIcon
+          style={{ justifyContent: 'flex-end' }}
+          onClick={(event) => {
+            event.stopPropagation();
+            listMelody.splice(listMelody.indexOf(melody), 1);
+            setMelodyCount(melodyCount - 1);
+          }}
+        >
           <Tooltip title="Supprimer la mélodie">
-            <ListItemIcon 
-              style={{ justifyContent: 'flex-end' }} 
-              onClick={(event) => {
-                event.stopPropagation();
-                listMelody.splice(listMelody.indexOf(melody), 1);
-                setMelodyCount(melodyCount - 1);
-              }}
-            >
-              <DeleteIcon />
-            </ListItemIcon>
+            <DeleteIcon />
           </Tooltip>
-        )}
+        </ListItemIcon>
+      )}
     </ListItemButton>
   ));
 
