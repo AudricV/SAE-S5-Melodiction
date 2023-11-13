@@ -1,11 +1,14 @@
-import React from 'react';
 import './App.css';
 // @ts-ignore
 import MainPage from './pages/Main/main';
+import { Routes, Route } from 'react-router-dom';
+
 
 function App() {
   return (
-    <MainPage/>
+    <Routes>
+      <Route path="/" element={<MainPage />} />
+    </Routes>
   );
 }
 
