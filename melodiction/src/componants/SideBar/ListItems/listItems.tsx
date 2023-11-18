@@ -12,39 +12,52 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Melody from '../../../data/melody';
 import { useState } from 'react';
 import { Divider, List as MuiList, Tooltip } from '@mui/material';
-
-
-const listMelody = [
-  new Melody('1', 'Mélodie 1', 'C4 D4 E4 F4 G4 A4 B4 C5', 2012),
-  new Melody('2', 'Mélodie 2', "OUI", 87)
-];
+import { v4 as uuidv4 } from 'uuid';
+import LocalMelodiesStorage from '../../../data/storage/impl/local_melodies_storage';
 
 const MainListItems = () => {
   const navigate = useNavigate();
+  // TODO: better error handling
+  const melodiesStorage = new LocalMelodiesStorage();
 
-  const [melodyCount, setMelodyCount] = useState(listMelody.length);
+  const melodiesList: ReadonlyArray<Melody> = melodiesStorage.getMelodiesList()
+    ?? ([] as ReadonlyArray<Melody>);
+
+  const [melodyCount, setMelodyCount] = useState(melodiesStorage.getMelodiesCount() ?? 0);
+  const [melodies, setMelodies] = useState(melodiesList);
   const [hoveredMelodyId, setHoveredMelodyId] = useState('' as string | null);
 
   const addNewMelody = () => {
-
-    const newMelodyCount = melodyCount + 1;
     const newMelody = new Melody(
-      newMelodyCount.toString(),
-      'UH ' + newMelodyCount,
-      'rzijfeoai',
-      new Date().getUTCMilliseconds()
+      uuidv4(),
+      'Mélodie',
+      'Texte de la mélodie',
+      Date.now()
     );
 
-    listMelody.push(newMelody);
-    setMelodyCount(newMelodyCount);
+    if (melodiesStorage.addMelody(newMelody)) {
+      setMelodyCount(melodyCount + 1);
+      setMelodies(melodies => [...melodies, newMelody]);
+    } else {
+      // TODO: better error handling
+      console.error("Unable to add the new melody");
+    }
   };
 
-  const listMelodyItems = listMelody.map((melody) => (
+  const deleteMelody = (index: number) => {
+    const updatedMelodies = melodies.filter((_, melodyIndex) => melodyIndex !== index);
+    melodiesStorage.deleteMelody(index);
+    setMelodies(updatedMelodies);
+    setMelodyCount(updatedMelodies.length);
+  };
+  
+  const listMelodyItems = melodies.map((melody) => (
     <ListItemButton key={melody.getId()}
       onMouseEnter={() => setHoveredMelodyId(melody.getId())}
       onMouseLeave={() => setHoveredMelodyId(null)}
       onClick={() => {
-        navigate("/", { state: { melody } });
+        const idMelody = melody.getId();
+        navigate("/", { state: { idMelody } });
       }}
     >
       <ListItemIcon>
@@ -56,8 +69,7 @@ const MainListItems = () => {
           style={{ justifyContent: 'flex-end' }}
           onClick={(event) => {
             event.stopPropagation();
-            listMelody.splice(listMelody.indexOf(melody), 1);
-            setMelodyCount(melodyCount - 1);
+            deleteMelody(melodies.indexOf(melody));
           }}
         >
           <Tooltip title="Supprimer la mélodie">
