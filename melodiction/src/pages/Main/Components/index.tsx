@@ -7,8 +7,11 @@ import { Stack } from '@mui/material';
 import { SoundPlaybackManager } from '../../../tools/sound_playback_manager';
 import Melody from '../../../data/melody';
 import LocalMelodiesStorage from '../../../data/storage/impl/local_melodies_storage';
+import { useMelodyContext } from '../../../context/melodyContetxt';
 
-function PageMain({id}: {id: string}) {
+function PageMain() {
+    const { selectedMelodyFromContext } = useMelodyContext();
+    const id : String = selectedMelodyFromContext?.getId() || ''; 
     const melodiesStorage = new LocalMelodiesStorage();
     
     const [inputText, setInputText] = useState<string>('');

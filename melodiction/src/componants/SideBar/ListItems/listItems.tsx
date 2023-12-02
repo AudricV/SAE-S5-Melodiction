@@ -14,8 +14,10 @@ import { useState } from 'react';
 import { Divider, List as MuiList, Tooltip } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import LocalMelodiesStorage from '../../../data/storage/impl/local_melodies_storage';
+import { useMelodyContext } from '../../../context/melodyContetxt';
 
 const MainListItems = () => {
+  const { setSelectedMelodyFromContext } = useMelodyContext();
   const navigate = useNavigate();
   // TODO: better error handling
   const melodiesStorage = new LocalMelodiesStorage();
@@ -31,18 +33,20 @@ const MainListItems = () => {
     const newMelody = new Melody(
       uuidv4(),
       'Mélodie',
-      'Texte de la mélodie',
+      'Texte de la mélodie' + (melodyCount + 1).toString() ,
       Date.now()
     );
-
+  
     if (melodiesStorage.addMelody(newMelody)) {
-      setMelodyCount(melodyCount + 1);
-      setMelodies(melodies => [...melodies, newMelody]);
+      setMelodyCount(prevCount => prevCount + 1);
+      setMelodies(melodiesStorage.getMelodiesList() ?? ([] as ReadonlyArray<Melody>));
+      setSelectedMelodyFromContext(newMelody);
     } else {
       // TODO: better error handling
       console.error("Unable to add the new melody");
     }
   };
+  
 
   const deleteMelody = (index: number) => {
     const updatedMelodies = melodies.filter((_, melodyIndex) => melodyIndex !== index);
@@ -56,8 +60,8 @@ const MainListItems = () => {
       onMouseEnter={() => setHoveredMelodyId(melody.getId())}
       onMouseLeave={() => setHoveredMelodyId(null)}
       onClick={() => {
-        const idMelody = melody.getId();
-        navigate("/", { state: { idMelody } });
+        setSelectedMelodyFromContext(melody);
+        navigate("/");
       }}
     >
       <ListItemIcon>
