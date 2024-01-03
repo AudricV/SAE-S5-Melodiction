@@ -50,6 +50,8 @@ export type MelodyItemProps = {
      * @returns whether the melody has been deleted
      */
     onMelodyDeleted(): boolean
+
+    onMelodyClicked(): void
 }
 
 /**
@@ -90,10 +92,13 @@ export default class MelodyItem extends React.Component<MelodyItemProps, MelodyI
                         label="Nouveau nom de la mélodie"
                         variant="standard"
                         onInput={(event: React.ChangeEvent<HTMLInputElement>) =>
-                            this.setState({editingName: event.target.value})} />) :
+                            this.setState({ editingName: event.target.value })} />) :
                     (<ListItemText
                         className="melody_text"
-                        primary={this.props.melody.getName()} />)
+                        primary={this.props.melody.getName()}
+                        onClick={() => {
+                            this.props.onMelodyClicked();
+                        }} />)
                 }
                 {this.state.isEditingMelodyName ?
                     (<Tooltip title="Valider le changement de nom de la mélodie">
