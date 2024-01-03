@@ -140,7 +140,7 @@ export default function Layout() {
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-      <Box sx={{ display: 'flex', backgroundColor: '#31373E' }}>
+      <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={open} style={{}}>
           <Toolbar

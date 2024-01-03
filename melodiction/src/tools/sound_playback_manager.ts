@@ -117,7 +117,7 @@ export class SoundPlaybackManager {
     /**
      * Stop playback of the current sequence playing, if there is one.
      */
-    private stopPlayback() : void {
+    public stopPlayback() : void {
         Tone.Transport.cancel()
         if (this.currentSequence != null) {
             this.currentSequence.stop();

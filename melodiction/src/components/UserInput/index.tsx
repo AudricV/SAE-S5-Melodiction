@@ -27,24 +27,18 @@ const UserInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }} >
+    <div style={{ display: 'flex', bottom: '0', position: 'absolute', alignContent: 'center' }} >
       <TextField
         label="Your message"
         variant="outlined"
         value={message}
         onChange={handleInputChange}
         onKeyDown={handleKeyPress}
-        style={{ width: '100%', marginRight: '8px' }}
+        style={{ display: 'flex', width: '100%' }}
       />
-      {message ?
-        <Button variant="contained" color="primary" onClick={handleSendMessage}>
-          Send
-        </Button>
-        :
-        <Button variant="contained" color="primary" disabled>
-          Send
-        </Button>
-      }
+      <Button variant="contained" color="primary" onClick={handleSendMessage} disabled={!message.trim()}>
+        Send
+      </Button>
     </div>
   );
 };
