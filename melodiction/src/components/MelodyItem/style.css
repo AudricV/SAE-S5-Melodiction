@@ -1,0 +1,9 @@
+.melody_item * {
+    margin: 0.125em;
+}
+
+.melody_text {
+    overflow-x: auto;
+    text-align: left;
+    text-overflow: ellipsis;
+}
