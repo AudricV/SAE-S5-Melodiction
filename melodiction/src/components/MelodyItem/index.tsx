@@ -83,7 +83,11 @@ export default class MelodyItem extends React.Component<MelodyItemProps, MelodyI
 
     render() {
         return (
-            <ListItemButton className="melody_item">
+            <ListItemButton className="melody_item" onClick={() => {
+                if (!this.state.isEditingMelodyName) {
+                    this.props.onMelodyClicked();
+                }
+            }}>
                 <MusicNoteIcon className="melody_icon" />
                 {this.state.isEditingMelodyName ?
                     (<TextField
@@ -96,9 +100,7 @@ export default class MelodyItem extends React.Component<MelodyItemProps, MelodyI
                     (<ListItemText
                         className="melody_text"
                         primary={this.props.melody.getName()}
-                        onClick={() => {
-                            this.props.onMelodyClicked();
-                        }} />)
+                    />)
                 }
                 {this.state.isEditingMelodyName ?
                     (<Tooltip title="Valider le changement de nom de la mélodie">
