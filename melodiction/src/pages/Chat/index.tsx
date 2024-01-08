@@ -19,7 +19,7 @@ const MelodyPage: React.FC = () => {
 
     useEffect((): void => {
         if (!selectedMelody) {
-            console.log("No melody selected");
+            console.log("No melody selected. Redirecting to the landing page.");
             navigate('/');
         }
     }, [selectedMelody, navigate]);
@@ -78,7 +78,7 @@ const MelodyPage: React.FC = () => {
                     onMusicStop={() => { handleStopMusic(); }}
                 />
                     :
-                    <div>Chargement de la mélodie...</div>
+                    <p>Chargement de la mélodie&nbsp;hellip;</p>
                 }
             </Stack>
 

@@ -17,7 +17,7 @@ function Landing() {
 
             <Stack paddingTop={5} paddingBottom={10} paddingLeft={10} paddingRight={10} style={{ flex: 1, width: '100%' }}>
                 <Paper sx={{ padding: "1rem", overflow: "auto" }}>
-                    <div>Ecrivez...</div>
+                    <div>Écrivez&nbsp;hellip;</div>
                 </Paper>
             </Stack>
 

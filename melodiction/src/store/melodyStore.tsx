@@ -11,6 +11,3 @@ export const useMelodyStore = create<MelodyState>((set) => ({
   selectedMelody: null,
   setSelectedMelody: (Melody) => set(() => ({ selectedMelody: Melody })),
 }));
-
-// Usage in components remains the same
-// const { selectedMelody, setSelectedMelody, ... } = useMelodyStore();

@@ -82,11 +82,8 @@ const darkTheme = createTheme({
     text: {
       primary: '#FFFFFF', // Couleur du texte principal (blanc)
       secondary: '#CCCCCC', // Couleur du texte secondaire (gris clair)
-    },
-  },
-  typography: {
-    fontFamily: 'Poppins',
-  },
+    }
+  }
 });
 
 const lightTheme = createTheme({
@@ -106,10 +103,7 @@ const lightTheme = createTheme({
       primary: '#000000', // Couleur : noir
       secondary: '#555555', // Couleur du texte secondaire (gris)
     },
-  },
-  typography: {
-    fontFamily: 'Poppins',
-  },
+  }
 });
 
 function DarkModeToggle({ darkMode, toggleDarkMode }: { darkMode: boolean; toggleDarkMode: () => void }) {
@@ -161,7 +155,6 @@ export default function Layout() {
               <MenuIcon />
             </IconButton>
 
-            {/* Utilisez le composant DarkModeToggle */}
             <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
           

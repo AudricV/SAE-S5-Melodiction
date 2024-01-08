@@ -23,12 +23,9 @@ function TextScreen(props: TextScreenProps) {
 
     useEffect(() => {
         setEditedMessage(props.melody.getMelodyText());
-    }
-        , [props.melody.getMelodyText()]);
+    }, [props.melody.getMelodyText()]);
 
-    const handleEditClick = () => {
-        setIsEditing(true);
-    };
+    const handleEditClick = () => setIsEditing(true);
 
     const handleCancelEdit = () => {
         setIsEditing(false);

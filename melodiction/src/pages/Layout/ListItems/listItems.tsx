@@ -13,9 +13,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useManageMelody } from '../../../tools/manageMelody';
 
 export const linkStyles = {
-  textDecoration: 'none', // Supprime la décoration de texte
-  outline: 'none', // Supprime le surlignage bleu
-  color: 'inherit', // Garde la couleur du texte par défaut
+  textDecoration: 'none',
+  outline: 'none',
+  color: 'inherit',
 };
 
 const MainListItems = () => {
