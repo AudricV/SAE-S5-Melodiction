@@ -6,7 +6,6 @@ type MelodyState = {
   setSelectedMelody: (Melody: Melody | null) => void;
 }; 
 
-// Create a store using Zustand
 export const useMelodyStore = create<MelodyState>((set) => ({
   selectedMelody: null,
   setSelectedMelody: (Melody) => set(() => ({ selectedMelody: Melody })),

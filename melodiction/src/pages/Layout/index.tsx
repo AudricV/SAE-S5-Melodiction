@@ -59,7 +59,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         }),
         width: theme.spacing(7),
         [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(8),
+          width: theme.spacing(7),
         },
       }),
     },
@@ -68,20 +68,20 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark', // Activez le mode sombre 
+    mode: 'dark',
     primary: {
-      main: '#1976D2', // Couleur principale (bleu)
+      main: '#1976D2', // Primary color (blue)
     },
     secondary: {
-      main: '#388E3C', // Couleur secondaire (vert)
+      main: '#388E3C',
     },
     background: {
-      default: '#121212', // Couleur de fond par défaut (gris foncé)
-      paper: '#333333', // Couleur de fond des panneaux (gris)
+      default: '#121212', // Color : black
+      paper: '#333333', // Color of panels (dark grey)
     },
     text: {
-      primary: '#FFFFFF', // Couleur du texte principal (blanc)
-      secondary: '#CCCCCC', // Couleur du texte secondaire (gris clair)
+      primary: '#FFFFFF', // Color : white
+      secondary: '#CCCCCC', // Color of secondary text (grey)
     }
   }
 });
@@ -90,18 +90,18 @@ const lightTheme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#1976D2', // Couleur : bleu
+      main: '#1976D2', // Color : blue
     },
     secondary: {
-      main: '#388E3C', // Couleur : vert
+      main: '#388E3C',
     },
     background: {
-      default: '#FFFFFF', // Couleur : blanc
-      paper: '#F5F5F5', // Couleur de fond des panneaux (gris clair)
+      default: '#FFFFFF',
+      paper: '#F5F5F5',
     },
     text: {
-      primary: '#000000', // Couleur : noir
-      secondary: '#555555', // Couleur du texte secondaire (gris)
+      primary: '#000000',
+      secondary: '#555555',
     },
   }
 });
@@ -139,7 +139,7 @@ export default function Layout() {
         <AppBar position="absolute" open={open} style={{}}>
           <Toolbar
             sx={{
-              pr: '24px', // keep right padding when drawer closed
+              pr: '24px', // Change this value to adjust the closing toolbar
             }}
           >
             <IconButton
@@ -157,7 +157,6 @@ export default function Layout() {
 
             <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
-          
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open} >
