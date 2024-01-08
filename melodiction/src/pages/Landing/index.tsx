@@ -1,24 +1,32 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import { Paper, Stack } from '@mui/material';
+import { Stack, useTheme } from '@mui/material';
 import UserInput from '../../components/UserInput';
-import { useManageMelody } from '../../tools/manageMelody';
+import { useManageMelody } from '../../tools/manageMelodyItem';
+// eslint-disable-next-line import/no-unresolved
+import melodictionLogo from '/logo_Melodiction_en_cours.png';
 
 function Landing() {
     const { addNewMelody } = useManageMelody();
+    const theme = useTheme();
 
     const handleTextChange = (text: string) => {
         addNewMelody(text);
     };
 
+    // Determine the logo color based on the theme
+    const logoColor = theme.palette.mode === 'dark' ? 'white' : 'black';
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <CssBaseline />
 
-            <Stack paddingTop={5} paddingBottom={10} paddingLeft={10} paddingRight={10} style={{ flex: 1, width: '100%' }}>
-                <Paper sx={{ padding: "1rem", overflow: "auto" }}>
-                    <div>Écrivez&nbsp;hellip;</div>
-                </Paper>
+            <Stack paddingTop={5} paddingBottom={10} paddingLeft={10} paddingRight={10} style={{ width: '100%' }}>
+                <img
+                    src={melodictionLogo}
+                    alt="Description de l'image"
+                    style={{ width: '10%', height: '10%', display: 'block', margin: 'auto', paddingTop: '100px', filter: `invert(${theme.palette.mode === 'dark' ? '100%' : '0%'})`, color: logoColor }}
+                />
             </Stack>
 
             <UserInput onSendMessage={handleTextChange} />
