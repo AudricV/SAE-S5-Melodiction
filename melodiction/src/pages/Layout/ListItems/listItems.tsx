@@ -7,10 +7,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HelpIcon from '@mui/icons-material/Help';
 import AddIcon from '@mui/icons-material/Add';
 import { Divider, List as MuiList } from '@mui/material';
-import { useMelodyStore } from '../../../store/melodyStore';
 import MelodyItem from '../../../components/MelodyItem';
-import { Link, useNavigate } from 'react-router-dom';
-import { useManageMelody } from '../../../tools/manageMelody';
+import { Link } from 'react-router-dom';
+import { useManageMelody } from '../../../tools/manageMelodyItem';
 
 export const linkStyles = {
   textDecoration: 'none',
@@ -22,21 +21,15 @@ const MainListItems = () => {
   const {
     melodiesStorage,
     handleMelodyNameChanged,
+    handleMelodyClicked,
     handleMelodyDeleted
   } = useManageMelody();
-
-  const { setSelectedMelody } = useMelodyStore();
-  const navigate = useNavigate();
-  // TODO: better error handling
 
   const listMelodyItems = melodiesStorage.getMelodiesList()?.map((melody, melodyIndex) => (
     <MelodyItem
       melody={melody}
       key={melody.getId()}
-      onMelodyClicked={() => {
-        setSelectedMelody(melody);
-        navigate(`/melody/${melody.getId()}`);
-      }}
+      onMelodyClicked={() => handleMelodyClicked(melodyIndex)}
       onMelodyNameChanged={() => handleMelodyNameChanged(melodyIndex, melody)}
       onMelodyDeleted={() => handleMelodyDeleted(melodyIndex)}
     />
@@ -81,8 +74,6 @@ const MainListItems = () => {
           <ListItemText primary="test" />
         </ListItemButton>
       </Link>
-
-
 
     </React.Fragment>
   );
