@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMelodyStore } from "../store/melodyStore";
-import { SoundPlaybackManager } from "./sound_playback_manager";
-import { useManageMelody } from "./manageMelodyItem";
+import { SoundPlaybackManager } from "../tools/sound_playback_manager";
+import { useManageMelody } from "./manage_melody_item";
 
 export const useManageMusic = () => {
     const { selectedMelody, setSelectedMelody } = useMelodyStore();

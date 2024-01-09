@@ -3,9 +3,9 @@ import { useMelodyStore } from '../../store/melodyStore';
 import TextScreen from '../../components/TextScreen';
 import { Box, CssBaseline, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useManageMelody } from '../../tools/manageMelodyItem';
+import {useManageMelody} from '../../hooks/manage_melody_item';
 import UserInput from '../../components/UserInput';
-import { useManageMusic } from '../../tools/manageTextScreen';
+import {useManageMusic} from '../../hooks/manage_music';
 
 const MelodyPage: React.FC = () => {
     const { selectedMelody } = useMelodyStore();

@@ -9,7 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Divider, List as MuiList } from '@mui/material';
 import MelodyItem from '../../../components/MelodyItem';
 import { Link } from 'react-router-dom';
-import { useManageMelody } from '../../../tools/manageMelodyItem';
+import { useManageMelody } from '../../../hooks/manage_melody_item';
 
 export const linkStyles = {
   textDecoration: 'none',

@@ -2,7 +2,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import { Stack, useTheme } from '@mui/material';
 import UserInput from '../../components/UserInput';
-import { useManageMelody } from '../../tools/manageMelodyItem';
+import { useManageMelody } from '../../hooks/manage_melody_item';
 // eslint-disable-next-line import/no-unresolved
 import melodictionLogo from '/logo_Melodiction_en_cours.png';
 
