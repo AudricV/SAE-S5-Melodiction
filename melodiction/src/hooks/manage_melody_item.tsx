@@ -88,14 +88,16 @@ export const useManageMelody = (melodiesStorage: MelodiesStorage) => {
      * @returns true if the melody has been deleted, false otherwise
      */
     const handleMelodyDeleted = (melodyIndex: number): boolean => {
-        const melodyId = melodiesStorage.getMelodiesList()?.[melodyIndex].getId();
+        const melodyIdOfMelodyToDelete = melodies[melodyIndex].getId()
         if (melodiesStorage.deleteMelody(melodyIndex)) {
             setMelodyCount(prevCount => prevCount - 1);
-            setMelodies(melodiesStorage.getMelodiesList() ?? ([] as ReadonlyArray<Melody>));
-            if (selectedMelody?.getId() === melodyId) {
+            // If the selected melody ID is equal to the one of the melody deleted, go to the
+            // homepage
+            if (selectedMelody?.getId() === melodyIdOfMelodyToDelete) {
                 setSelectedMelody(null);
                 navigate('/');
             }
+            setMelodies(melodiesStorage.getMelodiesList() ?? ([] as ReadonlyArray<Melody>));
             return true;
         } else {
             // TODO: Better error handling?
