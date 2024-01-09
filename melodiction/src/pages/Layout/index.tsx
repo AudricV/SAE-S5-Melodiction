@@ -15,6 +15,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 
 import MainListItems from './ListItems/listItems';
 import { Outlet } from 'react-router-dom';
+import MelodiesStorage from "../../data/storage/melodies_storage";
 
 const drawerWidth: number = 240;
 
@@ -114,7 +115,11 @@ function DarkModeToggle({ darkMode, toggleDarkMode }: { darkMode: boolean; toggl
   );
 }
 
-export default function Layout() {
+export type LayoutProps = {
+  melodiesStorage: MelodiesStorage
+}
+
+export default function Layout({melodiesStorage}: LayoutProps) {
   const isDarkMode = localStorage.getItem('darkMode') === 'true';
   const [darkMode, setDarkMode] = useState(isDarkMode);
 
@@ -174,7 +179,7 @@ export default function Layout() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            <MainListItems />
+            <MainListItems melodiesStorage={melodiesStorage}/>
             <Divider sx={{ my: 1 }} />
           </List>
         </Drawer>

@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useMelodyStore } from "../store/melodyStore";
 import { SoundPlaybackManager } from "../tools/sound_playback_manager";
-import { useManageMelody } from "./manage_melody_item";
+import MelodiesStorage from "../data/storage/melodies_storage";
 
-export const useManageMusic = () => {
+export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
     const { selectedMelody, setSelectedMelody } = useMelodyStore();
     const soundPlaybackManager = new SoundPlaybackManager();
-    const { melodiesStorage } = useManageMelody();
 
     const [isEditing, setIsEditing] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);

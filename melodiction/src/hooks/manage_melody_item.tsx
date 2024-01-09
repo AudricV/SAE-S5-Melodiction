@@ -1,28 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Melody from "../data/melody";
-import LocalMelodiesStorage from "../data/storage/impl/local_melodies_storage";
 import { useMelodyStore } from "../store/melodyStore";
 import { v4 as uuidv4 } from 'uuid';
+import MelodiesStorage from "../data/storage/melodies_storage.ts";
 
-export const useManageMelody = () => {
+export const useManageMelody = (melodiesStorage: MelodiesStorage) => {
     const { selectedMelody, setSelectedMelody } = useMelodyStore();
     const navigate = useNavigate();
 
-    const melodiesStorage = new LocalMelodiesStorage();
     const melodiesList: ReadonlyArray<Melody> = melodiesStorage.getMelodiesList() ?? ([] as ReadonlyArray<Melody>);
 
     const [melodyCount, setMelodyCount] = useState(melodiesStorage.getMelodiesCount() ?? 0);
     const [melodies, setMelodies] = useState(melodiesList);
 
     /**
-     * 
-     * @param text The text of the melody
-     * @returns true if the melody has been added, false otherwise
-     * @description Add a new melody to the list of melodies
-     * @todo Better error handling
+     * Handle a melody add event.
+     *
+     * @param text the text of the melody, an empty string is used as the default value
+     * @returns true if a new melody has been added, false otherwise
      */
-    const addNewMelody = (text: string) => {
+    const handleAddNewMelody = (text: string = "") => {
         const newMelody = new Melody(
             uuidv4(),
             'Mélodie',
@@ -113,7 +111,7 @@ export const useManageMelody = () => {
         melodies,
         melodyCount,
         melodiesStorage,
-        addNewMelody,
+        handleAddNewMelody,
         handleMelodyNameChanged,
         handleMelodyClicked,
         handleMelodyDeleted,

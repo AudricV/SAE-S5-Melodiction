@@ -5,14 +5,17 @@ import UserInput from '../../components/UserInput';
 import { useManageMelody } from '../../hooks/manage_melody_item';
 // eslint-disable-next-line import/no-unresolved
 import melodictionLogo from '/logo_Melodiction_en_cours.png';
+import MelodiesStorage from "../../data/storage/melodies_storage";
 
-function Landing() {
-    const { addNewMelody } = useManageMelody();
+export type LandingProps = {
+    melodiesStorage: MelodiesStorage
+}
+
+function Landing({melodiesStorage}: LandingProps) {
+    const { handleAddNewMelody } = useManageMelody(melodiesStorage);
     const theme = useTheme();
 
-    const handleTextChange = (text: string) => {
-        addNewMelody(text);
-    };
+    const handleTextChange = (text: string) => handleAddNewMelody(text);
 
     // Determine the logo color based on the theme
     const logoColor = theme.palette.mode === 'dark' ? 'white' : 'black';

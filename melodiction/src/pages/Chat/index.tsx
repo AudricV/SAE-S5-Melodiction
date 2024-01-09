@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useMelodyStore } from '../../store/melodyStore';
 import TextScreen from '../../components/TextScreen';
 import { Box, CssBaseline, Stack } from '@mui/material';
@@ -6,11 +6,22 @@ import { useNavigate } from 'react-router-dom';
 import {useManageMelody} from '../../hooks/manage_melody_item';
 import UserInput from '../../components/UserInput';
 import {useManageMusic} from '../../hooks/manage_music';
+import MelodiesStorage from "../../data/storage/melodies_storage";
 
-const MelodyPage: React.FC = () => {
+export type MelodyPageProps = {
+    melodiesStorage: MelodiesStorage
+}
+
+const MelodyPage = ({melodiesStorage}: MelodyPageProps) => {
     const { selectedMelody } = useMelodyStore();
-    const { handleMelodySaved } = useManageMelody();
-    const { selectedMelodyIndex, handleEditClick, handleTextChange, handlePlayMusic, handleStopMusic } = useManageMusic();
+    const { handleMelodySaved } = useManageMelody(melodiesStorage);
+    const {
+        selectedMelodyIndex,
+        handleEditClick,
+        handleTextChange,
+        handlePlayMusic,
+        handleStopMusic
+    } = useManageMusic(melodiesStorage);
 
     const navigate = useNavigate();
 
