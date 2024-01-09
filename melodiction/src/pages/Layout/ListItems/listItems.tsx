@@ -10,34 +10,27 @@ import { Divider, List as MuiList } from '@mui/material';
 import MelodyItem from '../../../components/MelodyItem';
 import { Link } from 'react-router-dom';
 import { useManageMelody } from '../../../hooks/manage_melody_item';
+import Melody from '../../../data/melody';
 import MelodiesStorage from "../../../data/storage/melodies_storage";
 
 export const linkStyles = {
-  textDecoration: 'none',
-  outline: 'none',
-  color: 'inherit',
+    textDecoration: 'none',
+    outline: 'none',
+    color: 'inherit',
 };
 
-const MainListItems = () => {
-  const {
-    melodiesStorage,
-    handleMelodyNameChanged,
-    handleMelodyClicked,
-    handleMelodyDeleted
-  } = useManageMelody();
 export type MainListItemsProps = {
     melodiesStorage: MelodiesStorage
 }
 
 const MainListItems = ({melodiesStorage}: MainListItemsProps) => {
     const {
-        handleAddNewMelody,
         handleMelodyNameChanged,
         handleMelodyClicked,
         handleMelodyDeleted
     } = useManageMelody(melodiesStorage);
 
-  const listMelodyItems = melodiesStorage.getMelodiesList()?.map((melody, melodyIndex) => (
+    const listMelodyItems = melodiesStorage.getMelodiesList()?.map((melody: Melody, melodyIndex: number) => (
     <MelodyItem
       melody={melody}
       key={melody.getId()}
@@ -51,7 +44,7 @@ const MainListItems = ({melodiesStorage}: MainListItemsProps) => {
     <React.Fragment>
 
       <Link to="/" style={linkStyles}>
-        <ListItemButton onClick={() => handleAddNewMelody()}>
+        <ListItemButton>
           <ListItemIcon>
             <AddIcon />
           </ListItemIcon>

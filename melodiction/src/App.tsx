@@ -1,5 +1,4 @@
-// @ts-ignore
-import { Routes, Route } from 'react-router-dom';
+import {Routes, Route} from 'react-router-dom';
 import Landing from './pages/Landing';
 import Layout from './pages/Layout';
 import MelodyPage from './pages/Chat';

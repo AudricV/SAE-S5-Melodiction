@@ -45,7 +45,7 @@ const MelodyPage = ({melodiesStorage}: MelodyPageProps) => {
                     onMusicStop={() => handleStopMusic()}
                 />
                     :
-                    <div>Chargement de la mélodie...</div>
+                    <p>Chargement de la mélodie&nbsp;&ellip;</p>
                 }
             </Stack>
 

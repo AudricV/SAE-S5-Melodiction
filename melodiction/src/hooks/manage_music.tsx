@@ -11,28 +11,32 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
     const [isPlaying, setIsPlaying] = useState(false);
 
     /**
-     * 
+     * Event handler when clicking the edit button.
+     *
      * @returns true if the melody has been edited, false otherwise
-     * @description Edit the melody
      */
     const handleEditClick = () => {
-        if (isEditing == false) {
-            setIsEditing(true);
-        }
-        else {
-            if (selectedMelody?.getMelodyText().trim() === "") {
+        if (isEditing) {
+            if (selectedMelody == null) {
+                return;
+            }
+
+            if (selectedMelody.getMelodyText().trim() === "") {
+                // TODO: better error handling
                 alert("Veuillez saisir un message valide");
                 return;
             }
             setIsEditing(false);
+        } else {
+            setIsEditing(true);
         }
     };
 
     /**
-     * 
-     * @param text The text of the melody
+     * Add a new melody to the list of melodies.
+     *
+     * @param text the text of the melody
      * @returns true if the melody has been added, false otherwise
-     * @description Add a new melody to the list of melodies
      */
     const handleTextChange = (text: string) => {
         text = selectedMelody?.getMelodyText() + text;
@@ -43,38 +47,34 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
     };
 
     /**
-     * 
+     * Add a new melody to the list of melodies.
+     *
      * @returns true if the melody has been added, false otherwise
-     * @description Add a new melody to the list of melodies
      */
     const handlePlayMusic = () => {
         if (selectedMelody && !isPlaying) {
             setIsPlaying(true);
             soundPlaybackManager.playText(selectedMelody.getMelodyText(), 0.25);
-            console.log("Playing music");
+            console.debug("Playing music");
             setIsPlaying(false);
         }
     }
 
     /**
-     * 
-     * @returns true if the melody has been added, false otherwise
-     * @description Add a new melody to the list of melodies
-     * It doesn't stop properly. 
-     * I have the feeling that when you start the player, the sound is beeing loaded for some moments.
-     * Then, when you stop it, the sound is still playing for the loaded time.
+     * Stop the music if it is playing.
      */
     const handleStopMusic = () => {
         if (isPlaying) {
             setIsPlaying(false);
+            // FIXME: Playback doesn't stop properly currently: it seems that when the player is
+            //  started, the sound is being loaded for a moment. Then, when it is stopped, the
+            //  sound is still playing for the loaded time.
             soundPlaybackManager.stopPlayback();
-            console.log("Stopping music");
+            console.debug("Stopping music");
         }
     }
 
-    /**
-     * Index of the selected melody in the list of melodies
-     */
+    // Get the index of the selected melody in the list of melodies
     const selectedMelodyIndex = melodiesStorage.getMelodiesList()?.findIndex(m => m.getId() === selectedMelody?.getId());
 
     return {
