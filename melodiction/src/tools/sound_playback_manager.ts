@@ -1,13 +1,17 @@
 import * as Tone from 'tone';
-import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument';
-import { convertLetterToNote } from './char_converter';
-import { SynthType } from "./synth_types";
+import {Chorus, Distortion, Filter, InputNode, Reverb, Tremolo} from 'tone';
+import {Instrument, InstrumentOptions} from 'tone/build/esm/instrument/Instrument';
+import {convertLetterToNote} from './char_converter';
+import {SynthType} from "./synth_types";
+import {SynthData} from "./synth_data";
+import {ChorusEffect, DistortionEffect, Effect, FilterEffect, ReverbEffect, TremoloEffect} from "./effect";
+import {EffectType} from "./effect_types";
 
 /**
  * A class managing all synths used and playback of notes.
  */
 export class SoundPlaybackManager {
-    private synths: Map<SynthType, Instrument<InstrumentOptions>>;
+    private synths: Map<SynthType, SynthData>;
     private selectedSynthType: SynthType;
     private currentSequence: Tone.Sequence | null = null;
 
@@ -72,6 +76,132 @@ export class SoundPlaybackManager {
     }
 
     /**
+     * Add or replace an {@link Effect} to the synth having the given {@link SynthType}.
+     *
+     * Effects will be recreated to perform changes, if the given synth type correspond
+     * to an available synth.
+     *
+     * @param synthType the type of the synth to choose
+     * @param effect    the effect to add or replace
+     */
+    public addOrReplaceSynthEffect(synthType: SynthType, effect: Effect) {
+        const synthData = this.synths.get(synthType);
+        if (synthData == null) {
+            // No synth data corresponding to the synth type provided, do not do anything
+            return;
+        }
+        const previousEffect = this.getEffectFromEffectsSet(synthData, effect.effectType);
+        synthData.effects.add(effect);
+        if (previousEffect == null) {
+            const toneEffect = this.buildToneEffect(effect);
+            synthData.synth.chain(toneEffect);
+        } else {
+            // TODO: see if we can reuse effects already present instead
+            synthData.synth.disconnect();
+            for (const effect of synthData.effects) {
+                synthData.synth.chain(this.buildToneEffect(effect));
+            }
+        }
+    }
+
+    /**
+     * Delete an {@link Effect} to the synth having the given {@link SynthType}.
+     *
+     * Effects will be recreated to perform changes, if the given synth type correspond
+     * to an available synth and the given effect was used by the synth.
+     *
+     * @param synthType the type of the synth to choose
+     * @param effect    the effect to add or replace
+     */
+    public deleteEffect(synthType: SynthType, effect: Effect) {
+        const synthData = this.synths.get(synthType);
+        if (synthData == null) {
+            // No synth data corresponding to the synth type provided, do not do anything
+            return;
+        }
+        const hasEffectBeenDeleted = synthData.effects.delete(effect);
+        if (hasEffectBeenDeleted) {
+            // TODO: see if we can reuse effects already present instead
+            synthData.synth.disconnect();
+            for (const effect of synthData.effects) {
+                synthData.synth.chain(this.buildToneEffect(effect));
+            }
+        } else {
+            // No effect to delete, do not do anything
+            return;
+        }
+    }
+
+    /**
+     * Build a new Tone.js effect from an {@link Effect}, based on the effect type.
+     *
+     * Properties in the `Effect` implementations will be used to construct their respective
+     * Tone.js equivalent
+     *
+     * @param effect the effect data to use
+     * @returns a new Tone.js effect using the properties of the provided effect data
+     */
+    private buildToneEffect(effect: Effect): InputNode {
+        switch (effect.effectType) {
+            case EffectType.CHORUS: {
+                const chorusEffect = effect as ChorusEffect;
+                return new Chorus(
+                    chorusEffect.frequency,
+                    chorusEffect.delayTime,
+                    chorusEffect.depth);
+            }
+            case EffectType.TREMOLO: {
+                const tremoloEffect = effect as TremoloEffect;
+                return new Tremolo(
+                    tremoloEffect.frequency,
+                    tremoloEffect.depth
+                );
+            }
+            case EffectType.REVERB: {
+                const reverbEffect = effect as ReverbEffect;
+                return new Reverb({
+                    decay: 0,
+                    preDelay: 0,
+                    wet: reverbEffect.wet
+                });
+            }
+            case EffectType.FILTER: {
+                const filterEffect = effect as FilterEffect;
+                return new Filter(
+                    filterEffect.frequency,
+                    filterEffect.type,
+                    filterEffect.rolloff
+                );
+            }
+            case EffectType.DISTORTION: {
+                const distortionEffect = effect as DistortionEffect;
+                return new Distortion(
+                    distortionEffect.distortionValue
+                );
+            }
+        }
+    }
+
+    /**
+     * Get the first effect found equal to the given {@link EffectType} in the effects set from the
+     * given {@link SynthData}.
+     *
+     * @param synthData  the synth data to use
+     * @param effectType the type of the effect to find
+     *
+     * @returns the effect corresponding to the given effect type or `null` if no effect has been
+     * found
+     */
+    private getEffectFromEffectsSet(synthData: SynthData, effectType: EffectType): Effect | null {
+        for (const effect of synthData.effects.values()) {
+            if (effect.effectType == effectType) {
+                return effect;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Returns an iterator of all synths types.
      *
      * @returns an iterator of all synths types
@@ -80,21 +210,15 @@ export class SoundPlaybackManager {
         return this.synths.keys();
     }
 
-    setSynthOptions(synthType: SynthType, synthOptions: InstrumentOptions) {
-        const synth = this.synths.get(synthType);
-        if (synth) {
-            // TODO: passing directly options seems to require building a new object,
-            // check what we really need to do to apply new options
-        }
-    }
-
     /**
      * Build the list of synths which can be used.
      */
     private buildSynths() : void {
-        const synth = new Tone.Synth().toDestination();
-        this.synths.set(SynthType.SYNTH, synth);
         // TODO: add other synths when we will use them
+        this.synths.set(SynthType.SYNTH, {
+            synth: new Tone.Synth().toDestination(),
+            effects: new Set<Effect>()
+        });
     }
 
     /**
@@ -124,6 +248,6 @@ export class SoundPlaybackManager {
      * @returns the selected synth
      */
     private getSelectedSynth() : Instrument<InstrumentOptions> | null {
-        return this.synths.get(this.selectedSynthType) || null;
+        return this.synths.get(this.selectedSynthType)?.synth || null;
     }
 }
