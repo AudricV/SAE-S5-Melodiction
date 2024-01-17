@@ -159,11 +159,7 @@ export class SoundPlaybackManager {
             }
             case EffectType.REVERB: {
                 const reverbEffect = effect as ReverbEffect;
-                return new Reverb({
-                    decay: 0,
-                    preDelay: 0,
-                    wet: reverbEffect.wet
-                });
+                return new Reverb(reverbEffect.decay);
             }
             case EffectType.FILTER: {
                 const filterEffect = effect as FilterEffect;
