@@ -57,9 +57,11 @@ export interface TremoloEffect extends Effect {
  */
 export interface ReverbEffect extends Effect {
     /**
-     * The percentage of the mix between the effect and the signal.
+     * The duration of the reverb.
+     *
+     * It must be higher than or equal to 0.001.
      */
-    wet: number,
+    decay: number,
 
     effectType: EffectType.REVERB
 }
