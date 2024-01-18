@@ -210,9 +210,16 @@ export class SoundPlaybackManager {
      * Build the list of synths which can be used.
      */
     private buildSynths() : void {
-        // TODO: add other synths when we will use them
         this.synths.set(SynthType.SYNTH, {
             synth: new Tone.Synth().toDestination(),
+            effects: new Set<Effect>()
+        });
+        this.synths.set(SynthType.FM_SYNTH, {
+            synth: new Tone.FMSynth().toDestination(),
+            effects: new Set<Effect>()
+        });
+        this.synths.set(SynthType.PLUCK, {
+            synth: new Tone.PluckSynth().toDestination(),
             effects: new Set<Effect>()
         });
     }
