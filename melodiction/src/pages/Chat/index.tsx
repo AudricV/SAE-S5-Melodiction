@@ -25,12 +25,7 @@ const MelodyPage = ({ melodiesStorage }: MelodyPageProps) => {
         handleStopMusic
     } = useManageMusic(melodiesStorage);
 
-    const { chorusEffect,
-        tremoloEffect,
-        reverbEffect,
-        filterEffect,
-        distortionEffect,
-        synthType,
+    const {
         handheSynthChange,
         handleChorusFrequencyChange,
         handleChorusDelayTimeChange,
@@ -68,7 +63,7 @@ const MelodyPage = ({ melodiesStorage }: MelodyPageProps) => {
 
                     </Stack>
                     <Box sx={{ display: 'flex', bottom: '0', position: 'absolute', alignContent: 'center', flexDirection: 'column' }}>
-                        <EffectsItems melody={selectedMelody} indexMelody={selectedMelodyIndex ?? -1} 
+                        <EffectsItems melody={selectedMelody} indexMelody={selectedMelodyIndex ?? -1}
                             handleSynthChange={handheSynthChange}
                             handleChorusDelayTimeChange={handleChorusDelayTimeChange}
                             handleChorusDepthChange={handleChorusDepthChange}
@@ -80,7 +75,7 @@ const MelodyPage = ({ melodiesStorage }: MelodyPageProps) => {
                             handleFilterRolloffChange={handleFilterRolloffChange}
                             handleDistortionValueChange={handleDistortionValueChange}
                             handleResetEffects={handleResetEffects}
-                            handleMelodySaved={() => {handleMelodySaved(selectedMelodyIndex ?? -1, selectedMelody)}}
+                            handleMelodySaved={() => { handleMelodySaved(selectedMelodyIndex ?? -1, selectedMelody) }}
                         />
                         <UserInput onSendMessage={handleTextChange} />
                     </Box>
