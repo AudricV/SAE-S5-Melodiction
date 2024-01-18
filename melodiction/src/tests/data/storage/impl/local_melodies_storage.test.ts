@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, test } from 'vitest';
 import LocalMelodiesStorage from '../../../../data/storage/impl/local_melodies_storage';
 import Melody from '../../../../data/melody';
+import {SynthType} from "../../../../tools/synth_types";
+import {ChorusEffect, TremoloEffect} from "../../../../tools/effect";
 
 // This test suite requires to have access to a jsdom test environment, in order to use
 // localStorage APIs
@@ -21,7 +23,16 @@ describe("Local melodies storage tests", () => {
         const melodiesStorage = new LocalMelodiesStorage();
 
         expect(melodiesStorage.addMelody(
-            new Melody("azerty", "Melody", "tada", 1699542480024))).toEqual(true);
+            new Melody(
+                "azerty",
+                "Melody",
+                "tada",
+                1699542480024,
+                new Map().set(SynthType.SYNTH, [{
+                    frequency: 1234,
+                    depth: 12
+                } as TremoloEffect]))))
+            .toEqual(true);
 
         expect(melodiesStorage.getMelodiesCount()).toEqual(1);
     });
@@ -29,18 +40,44 @@ describe("Local melodies storage tests", () => {
     test("Get melodies list should return melodies saved", () => {
         const melodiesStorage = new LocalMelodiesStorage();
 
-        melodiesStorage.addMelody(new Melody("azerty", "Melody", "tada", 1699542480024));
+        melodiesStorage.addMelody(
+            new Melody(
+                "azerty",
+                "Melody",
+                "tada",
+                1699542480024,
+                new Map().set(SynthType.SYNTH, [{
+                    frequency: 1234,
+                    depth: 12
+                } as TremoloEffect])));
         expect(melodiesStorage.getMelodiesCount()).toEqual(1);
 
         const melodiesList = melodiesStorage.getMelodiesList();
 
         expect(melodiesList).not.toBeNull();
-        expect(melodiesList![0]).toEqual(new Melody("azerty", "Melody", "tada", 1699542480024));
+        expect(melodiesList![0]).toEqual(
+            new Melody(
+                "azerty",
+                "Melody",
+                "tada",
+                1699542480024,
+                new Map().set(SynthType.SYNTH, [{
+                    frequency: 1234,
+                    depth: 12
+                } as TremoloEffect])));
     });
 
     test("Move a melody within a melody list of one melody shouldn't change anything", () => {
         const melodiesStorage = new LocalMelodiesStorage();
-        const melody = new Melody("azerty", "Melody 1", "tada", 1699542480024);
+        const melody = new Melody(
+            "azerty",
+            "Melody 1",
+            "tada",
+            1699542480024,
+            new Map().set(SynthType.SYNTH, [{
+                frequency: 1234,
+                depth: 12
+            } as TremoloEffect]));
 
         expect(melodiesStorage.addMelody(melody)).toEqual(true);
         expect(melodiesStorage.moveMelody(0, 1)).toEqual(false);
@@ -49,8 +86,25 @@ describe("Local melodies storage tests", () => {
 
     test("Move a melody within a melody list of two melodies should move the melody", () => {
         const melodiesStorage = new LocalMelodiesStorage();
-        const melodyOne = new Melody("azerty", "Melody 1", "tada", 1699542480024);
-        const melodyTwo = new Melody("iop", "Melody 2", "tada", 1699542480567);
+        const melodyOne = new Melody(
+            "azerty",
+            "Melody 1",
+            "tada",
+            1699542480024,
+            new Map().set(SynthType.SYNTH, [{
+                frequency: 1234,
+                depth: 12
+            } as TremoloEffect]));
+        const melodyTwo = new Melody(
+            "iop",
+            "Melody 2",
+            "tada",
+            1699542480567,
+            new Map().set(SynthType.PLUCK, [{
+                frequency: 1234,
+                delayTime: 34,
+                depth: 12
+            } as ChorusEffect]));
 
         expect(melodiesStorage.addMelody(melodyOne)).toEqual(true);
         expect(melodiesStorage.addMelody(melodyTwo)).toEqual(true);
@@ -64,8 +118,25 @@ describe("Local melodies storage tests", () => {
 
     test("Move a melody with one or two invalid indexes shouldn't change anything", () => {
         const melodiesStorage = new LocalMelodiesStorage();
-        const melodyOne = new Melody("azerty", "Melody 1", "tada", 1699542480024);
-        const melodyTwo = new Melody("iop", "Melody 2", "tada", 1699542480567);
+        const melodyOne = new Melody(
+            "azerty",
+            "Melody 1",
+            "tada",
+            1699542480024,
+            new Map().set(SynthType.SYNTH, [{
+                frequency: 1234,
+                depth: 12
+            } as TremoloEffect]));
+        const melodyTwo = new Melody(
+            "iop",
+            "Melody 2",
+            "tada",
+            1699542480567,
+            new Map().set(SynthType.PLUCK, [{
+                frequency: 1234,
+                delayTime: 34,
+                depth: 12
+            } as ChorusEffect]));
 
         expect(melodiesStorage.addMelody(melodyOne)).toEqual(true);
         expect(melodiesStorage.addMelody(melodyTwo)).toEqual(true);
@@ -80,7 +151,15 @@ describe("Local melodies storage tests", () => {
 
     test("Move a melody to the same index should work and not change anything", () => {
         const melodiesStorage = new LocalMelodiesStorage();
-        const melodyOne = new Melody("azerty", "Melody 1", "tada", 1699542480024);
+        const melodyOne = new Melody(
+            "azerty",
+            "Melody 1",
+            "tada",
+            1699542480024,
+            new Map().set(SynthType.SYNTH, [{
+                frequency: 1234,
+                depth: 12
+            } as TremoloEffect]));
 
         expect(melodiesStorage.addMelody(melodyOne)).toEqual(true);
         expect(melodiesStorage.moveMelody(0, 0)).toEqual(true);
@@ -92,7 +171,15 @@ describe("Local melodies storage tests", () => {
 
     test("Delete a melody with a valid index should delete the melody", () => {
         const melodiesStorage = new LocalMelodiesStorage();
-        const melodyOne = new Melody("azerty", "Melody 1", "tada", 1699542480024);
+        const melodyOne = new Melody(
+            "azerty",
+            "Melody 1",
+            "tada",
+            1699542480024,
+            new Map().set(SynthType.SYNTH, [{
+                frequency: 1234,
+                depth: 12
+            } as TremoloEffect]));
 
         expect(melodiesStorage.addMelody(melodyOne)).toEqual(true);
         expect(melodiesStorage.deleteMelody(0)).toEqual(true);
@@ -101,7 +188,15 @@ describe("Local melodies storage tests", () => {
 
     test("Delete a melody with an invalid index shouldn't do anything", () => {
         const melodiesStorage = new LocalMelodiesStorage();
-        const melodyOne = new Melody("azerty", "Melody 1", "tada", 1699542480024);
+        const melodyOne = new Melody(
+            "azerty",
+            "Melody 1",
+            "tada",
+            1699542480024,
+            new Map().set(SynthType.SYNTH, [{
+                frequency: 1234,
+                depth: 12
+            } as TremoloEffect]));
 
         expect(melodiesStorage.addMelody(melodyOne)).toEqual(true);
         expect(melodiesStorage.deleteMelody(1)).toEqual(false);
@@ -115,6 +210,7 @@ describe("Local melodies storage tests", () => {
         melody[LocalMelodiesStorage.MELODY_NAME_KEY_NAME] = "Melody";
         melody[LocalMelodiesStorage.MELODY_TEXT_KEY_NAME] = "tada";
         melody[LocalMelodiesStorage.MELODY_TEXT_KEY_LAST_MODIFIED_TIMESTAMP] = 1699542480024;
+        melody[LocalMelodiesStorage.MELODY_EFFECTS_KEY_NAME] = {"0": [{"frequency": 1234, "depth": 12}]};
 
         localStorage.setItem("melodies_list", JSON.stringify([melody]));
 
@@ -129,11 +225,13 @@ describe("Local melodies storage tests", () => {
         firstMelody[LocalMelodiesStorage.MELODY_NAME_KEY_NAME] = "";
         firstMelody[LocalMelodiesStorage.MELODY_TEXT_KEY_NAME] = "tada";
         firstMelody[LocalMelodiesStorage.MELODY_TEXT_KEY_LAST_MODIFIED_TIMESTAMP] = 1699542480024;
+        firstMelody[LocalMelodiesStorage.MELODY_EFFECTS_KEY_NAME] = {"0": [{"frequency": 1234, "depth": 12}]};
 
         const secondMelody :any = {};
         secondMelody[LocalMelodiesStorage.MELODY_ID_KEY_NAME] = "azerty";
         secondMelody[LocalMelodiesStorage.MELODY_TEXT_KEY_NAME] = "tada";
         secondMelody[LocalMelodiesStorage.MELODY_TEXT_KEY_LAST_MODIFIED_TIMESTAMP] = 1699542480024;
+        secondMelody[LocalMelodiesStorage.MELODY_EFFECTS_KEY_NAME] = {"0": [{"frequency": 1234, "depth": 12}]};
 
         localStorage.setItem("melodies_list", JSON.stringify([firstMelody, secondMelody]));
 
@@ -152,6 +250,7 @@ describe("Local melodies storage tests", () => {
         melody[LocalMelodiesStorage.MELODY_ID_KEY_NAME] = "azerty";
         melody[LocalMelodiesStorage.MELODY_NAME_KEY_NAME] = "melody";
         melody[LocalMelodiesStorage.MELODY_TEXT_KEY_LAST_MODIFIED_TIMESTAMP] = 1699542480024;
+        melody[LocalMelodiesStorage.MELODY_EFFECTS_KEY_NAME] = {"0": [{"frequency": 1234, "depth": 12}]};
 
         localStorage.setItem("melodies_list", JSON.stringify([melody]));
 
@@ -166,10 +265,12 @@ describe("Local melodies storage tests", () => {
         firstMelody[LocalMelodiesStorage.MELODY_ID_KEY_NAME] = "azerty";
         firstMelody[LocalMelodiesStorage.MELODY_NAME_KEY_NAME] = "melody";
         firstMelody[LocalMelodiesStorage.MELODY_TEXT_KEY_LAST_MODIFIED_TIMESTAMP] = -1;
+        firstMelody[LocalMelodiesStorage.MELODY_EFFECTS_KEY_NAME] = {"0": [{"frequency": 1234, "depth": 12}]};
 
         const secondMelody :any = {};
         secondMelody[LocalMelodiesStorage.MELODY_ID_KEY_NAME] = "uiop";
         secondMelody[LocalMelodiesStorage.MELODY_TEXT_KEY_NAME] = "melody";
+        secondMelody[LocalMelodiesStorage.MELODY_EFFECTS_KEY_NAME] = {"0": [{"frequency": 1234, "depth": 12}]};
 
         localStorage.setItem("melodies_list", JSON.stringify([firstMelody, secondMelody]));
 
@@ -181,5 +282,30 @@ describe("Local melodies storage tests", () => {
         for (const melody of melodiesList) {
             expect(melody.getLastModifiedTimestamp()).toBeGreaterThanOrEqual(0);
         }
+    });
+
+    test("Get melodies with a melody having no melody effects saved should use no effects", () => {
+        const melody :any = {};
+        melody[LocalMelodiesStorage.MELODY_ID_KEY_NAME] = "azerty";
+        melody[LocalMelodiesStorage.MELODY_NAME_KEY_NAME] = "melody";
+        melody[LocalMelodiesStorage.MELODY_TEXT_KEY_LAST_MODIFIED_TIMESTAMP] = -1;
+        melody[LocalMelodiesStorage.MELODY_EFFECTS_KEY_NAME] = {"0": []};
+
+        const melodiesStorage = new LocalMelodiesStorage();
+        expect(melodiesStorage.getMelodiesCount()).toEqual(1);
+        expect(melodiesStorage.getMelodiesList()![0].getEffects()).toHaveLength(0);
+    });
+
+    test("Get melodies with a melody having invalid melody effects saved should use no effects", () => {
+        const melody :any = {};
+        melody[LocalMelodiesStorage.MELODY_ID_KEY_NAME] = "azerty";
+        melody[LocalMelodiesStorage.MELODY_NAME_KEY_NAME] = "melody";
+        melody[LocalMelodiesStorage.MELODY_TEXT_KEY_LAST_MODIFIED_TIMESTAMP] = -1;
+
+        localStorage.setItem("melodies_list", JSON.stringify([melody]));
+
+        const melodiesStorage = new LocalMelodiesStorage();
+        expect(melodiesStorage.getMelodiesCount()).toEqual(1);
+        expect(melodiesStorage.getMelodiesList()![0].getEffects()).toHaveLength(0);
     });
 });
