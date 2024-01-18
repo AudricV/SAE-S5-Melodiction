@@ -16,6 +16,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import MainListItems from './ListItems/listItems';
 import { Outlet } from 'react-router-dom';
 import MelodiesStorage from "../../data/storage/melodies_storage";
+import { Tooltip } from '@mui/material';
 
 const drawerWidth: number = 240;
 
@@ -110,7 +111,15 @@ const lightTheme = createTheme({
 function DarkModeToggle({ darkMode, toggleDarkMode }: { darkMode: boolean; toggleDarkMode: () => void }) {
   return (
     <IconButton color="inherit" onClick={toggleDarkMode}>
-      {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+      {darkMode ? (
+        <Tooltip title="Mode clair">
+          <Brightness7Icon />
+        </Tooltip>
+      ) : (
+        <Tooltip title="Mode sombre">
+          <Brightness4Icon />
+        </Tooltip>
+      )}
     </IconButton>
   );
 }
@@ -119,7 +128,7 @@ export type LayoutProps = {
   melodiesStorage: MelodiesStorage
 }
 
-export default function Layout({melodiesStorage}: LayoutProps) {
+export default function Layout({ melodiesStorage }: LayoutProps) {
   const isDarkMode = localStorage.getItem('darkMode') === 'true';
   const [darkMode, setDarkMode] = useState(isDarkMode);
 
@@ -147,18 +156,20 @@ export default function Layout({melodiesStorage}: LayoutProps) {
               pr: '24px', // Change this value to adjust the closing toolbar
             }}
           >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
+            <Tooltip title="Ouvrir le menu">
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={toggleDrawer}
+                sx={{
+                  marginRight: '36px',
+                  ...(open && { display: 'none' }),
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Tooltip>
 
             <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
@@ -173,13 +184,16 @@ export default function Layout({melodiesStorage}: LayoutProps) {
               px: [1],
             }}
           >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
+            <Tooltip title="Fermer le menu">
+              <IconButton onClick={toggleDrawer}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Tooltip>
+
           </Toolbar>
           <Divider />
           <List component="nav">
-            <MainListItems melodiesStorage={melodiesStorage}/>
+            <MainListItems melodiesStorage={melodiesStorage} />
             <Divider sx={{ my: 1 }} />
           </List>
         </Drawer>

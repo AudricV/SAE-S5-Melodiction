@@ -27,8 +27,7 @@ const UserInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
   };
 
   return (
-    <div style={{ display: 'flex', bottom: '0', position: 'absolute', alignContent: 'center', flexDirection: 'column' }} >
-      <TextField
+    <TextField
         label="Votre message"
         variant="outlined"
         value={message}
@@ -43,7 +42,6 @@ const UserInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
           ),
         }}
       />
-    </div>
   );
 };
 

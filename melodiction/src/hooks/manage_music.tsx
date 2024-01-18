@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMelodyStore } from "../store/melodyStore";
 import { SoundPlaybackManager } from "../tools/sound_playback_manager";
 import MelodiesStorage from "../data/storage/melodies_storage";
+import { useAudioStore } from "../store/effectsStore";
 
 export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
     const { selectedMelody, setSelectedMelody } = useMelodyStore();
@@ -9,6 +10,8 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
 
     const [isEditing, setIsEditing] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
+
+    const { synthType } = useAudioStore();
 
     /**
      * Event handler when clicking the edit button.
@@ -54,9 +57,13 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
     const handlePlayMusic = () => {
         if (selectedMelody && !isPlaying) {
             setIsPlaying(true);
+            soundPlaybackManager.setSelectedSynth(synthType);
             soundPlaybackManager.playText(selectedMelody.getMelodyText(), 0.25);
             console.debug("Playing music");
-            setIsPlaying(false);
+            setTimeout(() => {
+                console.debug("Stopping music");
+                setIsPlaying(false);
+            }, selectedMelody.getMelodyText().length * 0.50 * 1000);
         }
     }
 

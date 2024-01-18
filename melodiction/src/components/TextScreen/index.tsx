@@ -58,6 +58,10 @@ function TextScreen(props: TextScreenProps) {
                             <IconButton onClick={() => {
                                 setIsPlaying(true);
                                 props.onMusicPlay();
+                                setTimeout(() => {
+                                    setIsPlaying(false);
+                                }, props.melody.getMelodyText().length * 0.50 * 1000);
+
                             }
                             }>
                                 <PlayArrowIcon />
@@ -86,7 +90,9 @@ function TextScreen(props: TextScreenProps) {
                 </>
             ) : (
                 <IconButton onClick={handleEditClick}>
-                    <EditIcon />
+                    <Tooltip title="Modifier la mélodie">
+                        <EditIcon />
+                    </Tooltip>
                 </IconButton>
             )}
 
