@@ -1,9 +1,9 @@
 import * as Tone from 'tone';
-import {Chorus, Distortion, Filter, InputNode, Reverb, Tremolo} from 'tone';
+import {Chorus, Distortion, Filter, Reverb, Tremolo} from 'tone';
 import {Instrument, InstrumentOptions} from 'tone/build/esm/instrument/Instrument';
 import {convertLetterToNote} from './char_converter';
 import {SynthType} from "./synth_types";
-import {SynthData} from "./synth_data";
+import {EffectNode, SynthData} from "./synth_data";
 import {ChorusEffect, DistortionEffect, Effect, FilterEffect, ReverbEffect, TremoloEffect} from "./effect";
 import {EffectType} from "./effect_types";
 
@@ -81,6 +81,9 @@ export class SoundPlaybackManager {
      * Effects will be recreated to perform changes, if the given synth type correspond
      * to an available synth.
      *
+     * Method made with the help of EffectController class from JavaScript Software Synthesizer,
+     * made by Michael Kolesidis.
+     *
      * @param synthType the type of the synth to choose
      * @param effect    the effect to add or replace
      */
@@ -90,18 +93,33 @@ export class SoundPlaybackManager {
             // No synth data corresponding to the synth type provided, do not do anything
             return;
         }
+
+        synthData.synth.disconnect();
+
         const previousEffect = this.getEffectFromEffectsSet(synthData, effect.effectType);
-        synthData.effects.add(effect);
-        if (previousEffect == null) {
-            const toneEffect = this.buildToneEffect(effect);
-            synthData.synth.chain(toneEffect);
-        } else {
-            // TODO: see if we can reuse effects already present instead
-            synthData.synth.disconnect();
-            for (const effect of synthData.effects) {
-                synthData.synth.chain(this.buildToneEffect(effect));
+
+        if (previousEffect != null) {
+            const previousToneEffect = synthData.effects.get(previousEffect);
+            if (previousToneEffect) {
+                if (previousToneEffect instanceof Chorus || previousToneEffect instanceof Tremolo) {
+                    // Some effects require to call stop()
+                    previousToneEffect.stop();
+                }
+                previousToneEffect.disconnect();
             }
+            synthData.effects.delete(previousEffect);
         }
+
+        const newToneEffect = this.buildToneEffect(effect);
+        if (newToneEffect instanceof Chorus || newToneEffect instanceof Tremolo) {
+            // Some effects require to call start()
+            newToneEffect.start();
+        }
+
+        synthData.effects.set(effect, newToneEffect);
+        synthData.effects.forEach(value => {
+            synthData.synth.connect(value);
+        });
     }
 
     /**
@@ -109,6 +127,9 @@ export class SoundPlaybackManager {
      *
      * Effects will be recreated to perform changes, if the given synth type correspond
      * to an available synth and the given effect was used by the synth.
+     *
+     * Method made with the help of EffectController class from JavaScript Software Synthesizer,
+     * made by Michael Kolesidis.
      *
      * @param synthType the type of the synth to choose
      * @param effect    the effect to add or replace
@@ -119,17 +140,23 @@ export class SoundPlaybackManager {
             // No synth data corresponding to the synth type provided, do not do anything
             return;
         }
-        const hasEffectBeenDeleted = synthData.effects.delete(effect);
-        if (hasEffectBeenDeleted) {
-            // TODO: see if we can reuse effects already present instead
-            synthData.synth.disconnect();
-            for (const effect of synthData.effects) {
-                synthData.synth.chain(this.buildToneEffect(effect));
-            }
-        } else {
-            // No effect to delete, do not do anything
+        const toneEffectToDelete = synthData.effects.get(effect);
+
+        if (!toneEffectToDelete) {
             return;
         }
+
+        synthData.synth.disconnect();
+        if (toneEffectToDelete instanceof Chorus || toneEffectToDelete instanceof Tremolo) {
+            // Some effects require to call stop()
+            toneEffectToDelete.stop();
+        }
+        toneEffectToDelete.disconnect();
+        synthData.effects.delete(effect);
+
+        synthData.effects.forEach(value => {
+            synthData.synth.connect(value);
+        });
     }
 
     /**
@@ -141,39 +168,35 @@ export class SoundPlaybackManager {
      * @param effect the effect data to use
      * @returns a new Tone.js effect using the properties of the provided effect data
      */
-    private buildToneEffect(effect: Effect): InputNode {
+    private buildToneEffect(effect: Effect): EffectNode {
         switch (effect.effectType) {
             case EffectType.CHORUS: {
                 const chorusEffect = effect as ChorusEffect;
                 return new Chorus(
                     chorusEffect.frequency,
                     chorusEffect.delayTime,
-                    chorusEffect.depth);
+                    chorusEffect.depth).toDestination();
             }
             case EffectType.TREMOLO: {
                 const tremoloEffect = effect as TremoloEffect;
                 return new Tremolo(
                     tremoloEffect.frequency,
-                    tremoloEffect.depth
-                );
+                    tremoloEffect.depth).toDestination();
             }
             case EffectType.REVERB: {
                 const reverbEffect = effect as ReverbEffect;
-                return new Reverb(reverbEffect.decay);
+                return new Reverb(reverbEffect.decay).toDestination();
             }
             case EffectType.FILTER: {
                 const filterEffect = effect as FilterEffect;
                 return new Filter(
                     filterEffect.frequency,
                     filterEffect.type,
-                    filterEffect.rolloff
-                );
+                    filterEffect.rolloff).toDestination();
             }
             case EffectType.DISTORTION: {
                 const distortionEffect = effect as DistortionEffect;
-                return new Distortion(
-                    distortionEffect.distortionValue
-                );
+                return new Distortion(distortionEffect.distortionValue).toDestination();
             }
         }
     }
@@ -189,7 +212,7 @@ export class SoundPlaybackManager {
      * found
      */
     private getEffectFromEffectsSet(synthData: SynthData, effectType: EffectType): Effect | null {
-        for (const effect of synthData.effects.values()) {
+        for (const effect of synthData.effects.keys()) {
             if (effect.effectType == effectType) {
                 return effect;
             }
@@ -212,15 +235,15 @@ export class SoundPlaybackManager {
     private buildSynths() : void {
         this.synths.set(SynthType.SYNTH, {
             synth: new Tone.Synth().toDestination(),
-            effects: new Set<Effect>()
+            effects: new Map<Effect, EffectNode>()
         });
         this.synths.set(SynthType.FM_SYNTH, {
             synth: new Tone.FMSynth().toDestination(),
-            effects: new Set<Effect>()
+            effects: new Map<Effect, EffectNode>()
         });
         this.synths.set(SynthType.PLUCK, {
             synth: new Tone.PluckSynth().toDestination(),
-            effects: new Set<Effect>()
+            effects: new Map<Effect, EffectNode>()
         });
     }
 
@@ -238,9 +261,10 @@ export class SoundPlaybackManager {
      * Stop playback of the current sequence playing, if there is one.
      */
     public stopPlayback() : void {
-        Tone.Transport.cancel()
+        // TODO: stop doesn't work properly
         if (this.currentSequence != null) {
             this.currentSequence.stop();
+            this.currentSequence.clear();
         }
         Tone.Transport.stop();
     }
