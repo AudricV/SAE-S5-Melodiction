@@ -14,7 +14,7 @@ import { ChorusEffect, Effect } from '../../tools/effect';
 type EffectsItemsProps = {
     melody: Melody;
     indexMelody: number;
-    handheSynthChange: (synth: SynthType) => void;
+    handleSynthChange: (synth: SynthType) => void;
     handleChorusFrequencyChange: (e: Event, value: number | number[]) => void;
     handleChorusDelayTimeChange: (e: Event, value: number | number[]) => void;
     handleChorusDepthChange: (e: Event, value: number | number[]) => void;
