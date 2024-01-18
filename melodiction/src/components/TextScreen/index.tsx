@@ -90,7 +90,9 @@ function TextScreen(props: TextScreenProps) {
                 </>
             ) : (
                 <IconButton onClick={handleEditClick}>
-                    <EditIcon />
+                    <Tooltip title="Modifier la mélodie">
+                        <EditIcon />
+                    </Tooltip>
                 </IconButton>
             )}
 
