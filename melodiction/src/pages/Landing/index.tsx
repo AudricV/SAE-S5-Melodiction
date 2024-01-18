@@ -11,7 +11,7 @@ export type LandingProps = {
     melodiesStorage: MelodiesStorage
 }
 
-function Landing({melodiesStorage}: LandingProps) {
+function Landing({ melodiesStorage }: LandingProps) {
     const { handleAddNewMelody } = useManageMelody(melodiesStorage);
     const theme = useTheme();
 
@@ -32,7 +32,9 @@ function Landing({melodiesStorage}: LandingProps) {
                 />
             </Stack>
 
-            <UserInput onSendMessage={handleTextChange} />
+            <Box sx={{ display: 'flex', bottom: '0', position: 'absolute', alignContent: 'center', flexDirection: 'column' }}>
+                <UserInput onSendMessage={handleTextChange} />
+            </Box>
         </Box>
     );
 }
