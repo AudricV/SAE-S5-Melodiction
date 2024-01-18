@@ -11,7 +11,7 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
     const [isEditing, setIsEditing] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const { synthType } = useAudioStore(); 
+    const { synthType } = useAudioStore();
 
     /**
      * Event handler when clicking the edit button.
@@ -60,7 +60,10 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
             soundPlaybackManager.setSelectedSynth(synthType);
             soundPlaybackManager.playText(selectedMelody.getMelodyText(), 0.25);
             console.debug("Playing music");
-            setIsPlaying(false);
+            setTimeout(() => {
+                console.debug("Stopping music");
+                setIsPlaying(false);
+            }, selectedMelody.getMelodyText().length * 0.50 * 1000);
         }
     }
 
