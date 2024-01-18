@@ -9,7 +9,7 @@ import { EffectType } from '../../tools/effect_types';
 import { FilterRollOff } from 'tone';
 import { useMelodyStore } from '../../store/melodyStore';
 import Melody from '../../data/melody';
-import { Effect } from '../../tools/effect';
+import { ChorusEffect, Effect } from '../../tools/effect';
 
 type EffectsItemsProps = {
     melody: Melody;
@@ -25,6 +25,7 @@ type EffectsItemsProps = {
     handleFilterRolloffChange: (e: Event, value: number | number[]) => void;
     handleDistortionValueChange: (e: Event, value: number | number[]) => void;
     handleResetEffects: () => void;
+    handleMelodySaved: (index: number, melody: Melody) => void;
 }
 
 /**
@@ -37,16 +38,16 @@ export default function EffectsItems(props: EffectsItemsProps) {
 
     const {
         chorusEffect,
-        setChorusEffect,
         tremoloEffect,
-        setTremoloEffect,
         reverbEffect,
-        setReverbEffect,
         filterEffect,
-        setFilterEffect,
         distortionEffect,
-        setDistortionEffect,
         synthType,
+        setChorusEffect,
+        setTremoloEffect,
+        setReverbEffect,
+        setFilterEffect,
+        setDistortionEffect,
         setSynthType,
     } = useAudioStore();
 
@@ -55,20 +56,17 @@ export default function EffectsItems(props: EffectsItemsProps) {
         localStorage.setItem('stateEffectDrawer', JSON.stringify(!open));
     };
 
-
     /**
      * 
      * @param effects effects to be applied to the melody
      */
     const handleEffectsChange = (effects: Map<SynthType, Effect[]>) => {
-        const effectsMap = new Map<SynthType, Effect[]>();
-        effectsMap.set(synthType, effects.get(synthType) ?? []);
         setSelectedMelody(new Melody(
-            selectedMelody?.getId() ?? "",
-            selectedMelody?.getName() ?? "",
-            selectedMelody?.getMelodyText() ?? "",
-            selectedMelody?.getLastModifiedTimestamp() ?? 0,
-            effectsMap));
+            props.melody.getId() ?? "",
+            props.melody.getName() ?? "",
+            props.melody.getMelodyText() ?? "",
+            props.melody.getLastModifiedTimestamp() ?? Date.now(),
+            effects));
     }
 
     useEffect(() => {
@@ -79,7 +77,9 @@ export default function EffectsItems(props: EffectsItemsProps) {
                 reverbEffect,
                 filterEffect,
                 distortionEffect
-            ]));
+            ])
+        );
+        props.handleMelodySaved(props.indexMelody, selectedMelody as Melody);
     }, [chorusEffect, tremoloEffect, reverbEffect, filterEffect, distortionEffect, synthType]);
 
 

@@ -79,6 +79,7 @@ const MelodyPage = ({ melodiesStorage }: MelodyPageProps) => {
                             handleFilterRolloffChange={handleFilterRolloffChange}
                             handleDistortionValueChange={handleDistortionValueChange}
                             handleResetEffects={handleResetEffects}
+                            handleMelodySaved={() => {handleMelodySaved(selectedMelodyIndex ?? -1, selectedMelody)}}
                         />
                         <UserInput onSendMessage={handleTextChange} />
                     </Box>
