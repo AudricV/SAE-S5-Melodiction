@@ -1,3 +1,6 @@
+import {SynthType} from "../tools/synth_types.ts";
+import {Effect} from "../tools/effect.ts";
+
 /**
  * Data class representing a melody.
  *
@@ -12,6 +15,7 @@ export default class Melody {
     private name: string;
     private melodyText: string;
     private lastModifiedTimestamp: number;
+    private effects: Map<SynthType, Effect[]>;
 
     /**
      * Constructs a new {@link Melody} instance.
@@ -20,6 +24,8 @@ export default class Melody {
      * @param name - the name of the melody
      * @param melodyText - the text of the melody
      * @param lastModifiedTimestamp - the Unix timestamp of the latest change, which must be >= 0
+     * @param effects - the map of effects with their saved effects, effects are saved by their
+     * synth type
      *
      * @throws {@link InvalidTimestampError}
      * if the timestamp provided is < 0
@@ -27,7 +33,8 @@ export default class Melody {
     constructor(id: string,
                 name: string,
                 melodyText: string,
-                lastModifiedTimestamp: number) {
+                lastModifiedTimestamp: number,
+                effects: Map<SynthType, Effect[]>) {
         this.id = id;
         this.name = name;
         this.melodyText = melodyText;
@@ -35,6 +42,7 @@ export default class Melody {
             throw new InvalidTimestampError(lastModifiedTimestamp);
         }
         this.lastModifiedTimestamp = lastModifiedTimestamp;
+        this.effects = effects;
     }
 
     /**
@@ -105,6 +113,15 @@ export default class Melody {
             throw new InvalidTimestampError(lastModifiedTimestamp);
         }
         this.lastModifiedTimestamp = lastModifiedTimestamp;
+    }
+
+    /**
+     * Returns the effects per synth of the melody.
+     *
+     * @returns the effects per synth of the melody
+     */
+    getEffects(): Map<SynthType, readonly Effect[]> {
+        return this.effects;
     }
 }
 

@@ -1,5 +1,15 @@
 import Melody from "../../melody";
 import MelodiesStorage from "../melodies_storage";
+import MapifyTs from "mapify-ts";
+import {SynthType} from "../../../tools/synth_types";
+import {
+    ChorusEffect,
+    DistortionEffect,
+    Effect,
+    FilterEffect,
+    ReverbEffect,
+    TremoloEffect
+} from "../../../tools/effect";
 
 /**
  * A local implementation of {@link MelodiesStorage} using LocalStorage APIs.
@@ -45,6 +55,11 @@ export default class LocalMelodiesStorage implements MelodiesStorage {
      * The name of melodies' last modified timestamp key.
      */
     static readonly MELODY_TEXT_KEY_LAST_MODIFIED_TIMESTAMP = "lastModifiedTimestamp";
+
+    /**
+     * The name of melodies' effect key.
+     */
+    static readonly MELODY_EFFECTS_KEY_NAME = "effects";
 
     private melodyList: Melody[] = [];
 
@@ -145,15 +160,34 @@ export default class LocalMelodiesStorage implements MelodiesStorage {
                 jsonMelody[LocalMelodiesStorage.MELODY_TEXT_KEY_LAST_MODIFIED_TIMESTAMP];
             let melodyLastModifiedTimestamp = Number.parseInt(melodyLastModifiedTimestampText, 10);
             if (Number.isNaN(melodyLastModifiedTimestamp) || melodyLastModifiedTimestamp < 0) {
-                // This shouldn't happen if the storage isn't corrputed or the user or an extension
+                // This shouldn't happen if the storage isn't corrupted or the user or an extension
                 // didn't change the preference
                 console.warn("Invalid melody last modified timestamp: \""
                     + melodyLastModifiedTimestamp + "\". Using current time instead.");
                 melodyLastModifiedTimestamp = Date.now();
             }
 
+            const melodyEffectsText: string = jsonMelody[LocalMelodiesStorage.MELODY_EFFECTS_KEY_NAME];
+            const melodyEffects: Map<SynthType, Effect[]> = new Map<SynthType, Effect[]>();
+
+            const unserializedMelodySynthAndEffects = MapifyTs.deserialize(melodyEffectsText);
+            // If the effects key is defined, parse its effects linked to their synth types
+            if (unserializedMelodySynthAndEffects) {
+                for (const parsedMelodyEffect of Object.entries(unserializedMelodySynthAndEffects)) {
+                    const synthAndEffect = this.parseMelodySynthAndEffect(parsedMelodyEffect);
+                    if (synthAndEffect != null) {
+                        melodyEffects.set(synthAndEffect.synthType, synthAndEffect.effects);
+                    }
+                }
+            }
+
             this.melodyList.push(
-                new Melody(melodyId, melodyName, melodyText, melodyLastModifiedTimestamp));
+                new Melody(
+                    melodyId,
+                    melodyName,
+                    melodyText,
+                    melodyLastModifiedTimestamp,
+                    melodyEffects));
         });
     }
 
@@ -171,7 +205,13 @@ export default class LocalMelodiesStorage implements MelodiesStorage {
     private saveMelodyList(): boolean {
         try {
             localStorage.setItem(LocalMelodiesStorage.LOCAL_STORAGE_KEY_NAME,
-                JSON.stringify(this.melodyList));
+                JSON.stringify(this.melodyList, (key, value) => {
+                    if (key == LocalMelodiesStorage.MELODY_EFFECTS_KEY_NAME
+                        && value instanceof Map) {
+                        return MapifyTs.serialize(value);
+                    }
+                    return value;
+                }));
             return true;
         } catch (e) {
             console.error("Unable to save melody list", e);
@@ -187,9 +227,112 @@ export default class LocalMelodiesStorage implements MelodiesStorage {
      * A melody index is out of bounds if the index is < 0 and > melody list length.
      *
      * @param melodyIndex the melody index to check
+     *
      * @returns whether the melody index is out of bounds
      */
     private isMelodyIndexOutOfBounds(melodyIndex: number): boolean {
         return melodyIndex < 0 || melodyIndex > this.melodyList.length - 1;
+    }
+
+    private parseMelodySynthAndEffect(melodySynthAndEffectToParse: any): {
+        effects: Effect[];
+        synthType: SynthType
+    } | null {
+        const synthType = this.parseMelodySynthType(melodySynthAndEffectToParse);
+        if (synthType == null) {
+            console.log("Invalid synth type, ignoring this synth type and effect");
+            return null;
+        }
+        const effectsProperty = melodySynthAndEffectToParse[synthType];
+        const effects: Effect[] = [];
+        if (effectsProperty instanceof Array) {
+            for (const effectToParse of effectsProperty) {
+                const effect = this.parseMelodyEffect(effectToParse);
+                if (effect == null) {
+                    continue;
+                }
+                effects.push(effect);
+            }
+        }
+        return {
+            synthType,
+            effects: effects
+        };
+    }
+
+    /**
+     * Parse a synth type from its unserialized melody synth type and effect map entry
+     * representation.
+     *
+     * @param melodySynthAndEffectToParse - the melody synth type and effect to parse
+     *
+     * @returns an {@link SynthType} corresponding the representation or `null` if no synth type
+     * could be parsed
+     */
+    private parseMelodySynthType(melodySynthAndEffectToParse: any): SynthType | null {
+        if (Object.prototype.hasOwnProperty.call(melodySynthAndEffectToParse, 0)) {
+            return SynthType.SYNTH;
+        }
+        if (Object.prototype.hasOwnProperty.call(melodySynthAndEffectToParse, 1)) {
+            return SynthType.FM_SYNTH;
+        }
+        if (Object.prototype.hasOwnProperty.call(melodySynthAndEffectToParse, 2)) {
+            return SynthType.PLUCK;
+        }
+        return null;
+    }
+
+    /**
+     * Parse an effect from its unserialized melody synth and effect map entry representation.
+     *
+     * @param melodySynthAndEffectToParse - the melody synth type and effect to parse
+     * @returns an {@link Effect} corresponding the representation or `null` if no effect could be
+     * parsed
+     */
+    private parseMelodyEffect(melodySynthAndEffectToParse: any): Effect | null {
+        if (!melodySynthAndEffectToParse) {
+            console.warn("Invalid melody effect, ignoring this saved effect");
+            return null;
+        }
+
+        if (typeof (melodySynthAndEffectToParse.frequency) == "number") {
+            if (typeof (melodySynthAndEffectToParse.depth) == "number") {
+                if (typeof (melodySynthAndEffectToParse.delayTime) == "number") {
+                    return {
+                        frequency: melodySynthAndEffectToParse.frequency,
+                        delayTime: melodySynthAndEffectToParse.delayTime,
+                        depth: melodySynthAndEffectToParse.depth,
+                    } as ChorusEffect;
+                }
+                return {
+                    frequency: melodySynthAndEffectToParse.frequency,
+                    delayTime: melodySynthAndEffectToParse.delayTime,
+                } as unknown as TremoloEffect;
+            }
+
+            if (typeof (melodySynthAndEffectToParse.type) == "string"
+                && typeof (melodySynthAndEffectToParse.rolloff) == "number") {
+                return {
+                    frequency: melodySynthAndEffectToParse.frequency,
+                    type: melodySynthAndEffectToParse.type,
+                    rolloff: melodySynthAndEffectToParse.rolloff
+                } as FilterEffect;
+            }
+        }
+
+        if (typeof (melodySynthAndEffectToParse.decay) == "number") {
+            return {
+                decay: melodySynthAndEffectToParse.decay
+            } as ReverbEffect;
+        }
+
+        if (typeof (melodySynthAndEffectToParse.distortionValue) == "number") {
+            return {
+                distortionValue: melodySynthAndEffectToParse.distortionValue
+            } as DistortionEffect;
+        }
+
+        console.warn("Invalid melody effect, ignoring this saved effect");
+        return null;
     }
 }

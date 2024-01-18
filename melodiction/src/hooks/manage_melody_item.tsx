@@ -31,7 +31,8 @@ export const useManageMelody = (melodiesStorage: MelodiesStorage) => {
             uuidv4(),
             'Mélodie',
             text,
-            Date.now()
+            Date.now(),
+            new Map()
         );
 
         if (melodiesStorage.addMelody(newMelody)) {
