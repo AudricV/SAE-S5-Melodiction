@@ -23,39 +23,39 @@ export const useManageMusicEffectsButtons = () => {
         setSynthType(synth);
     }
 
-    const handleChorusFrequencyChange = (e: Event, value: number | number[]) => {
+    const handleChorusFrequencyChange = (_e: Event, value: number | number[]) => {
         setChorusEffect({ ...chorusEffect, frequency: value as number });
     }
 
-    const handleChorusDelayTimeChange = (e: Event, value: number | number[]) => {
+    const handleChorusDelayTimeChange = (_e: Event, value: number | number[]) => {
         setChorusEffect({ ...chorusEffect, delayTime: value as number });
     }
 
-    const handleChorusDepthChange = (e: Event, value: number | number[]) => {
+    const handleChorusDepthChange = (_e: Event, value: number | number[]) => {
         setChorusEffect({ ...chorusEffect, depth: value as number });
     }
 
-    const handleTremoloFrequencyChange = (e: Event, value: number | number[]) => {
+    const handleTremoloFrequencyChange = (_e: Event, value: number | number[]) => {
         setTremoloEffect({ ...tremoloEffect, frequency: value as number });
     }
 
-    const handleTremoloDepthChange = (e: Event, value: number | number[]) => {
+    const handleTremoloDepthChange = (_e: Event, value: number | number[]) => {
         setTremoloEffect({ ...tremoloEffect, depth: value as number });
     }
 
-    const handleReverbDecayChange = (e: Event, value: number | number[]) => {
+    const handleReverbDecayChange = (_e: Event, value: number | number[]) => {
         setReverbEffect({ ...reverbEffect, decay: value as number });
     }
 
-    const handleFilterFrequencyChange = (e: Event, value: number | number[]) => {
+    const handleFilterFrequencyChange = (_e: Event, value: number | number[]) => {
         setFilterEffect({ ...filterEffect, frequency: value as number });
     }
 
-    const handleFilterRolloffChange = (e: Event, value: number | number[]) => {
+    const handleFilterRolloffChange = (_e: Event, value: number | number[]) => {
         setFilterEffect({ ...filterEffect, rolloff: value as FilterRollOff });
     }
 
-    const handleDistortionValueChange = (e: Event, value: number | number[]) => {
+    const handleDistortionValueChange = (_e: Event, value: number | number[]) => {
         setDistortionEffect({ ...distortionEffect, distortionValue: value as number });
     }
 

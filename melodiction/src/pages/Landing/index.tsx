@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { Stack, useTheme } from '@mui/material';
 import UserInput from '../../components/UserInput';
 import { useManageMelody } from '../../hooks/manage_melody_item';
-// eslint-disable-next-line import/no-unresolved
+// @ts-expect-error Usage of an image logo path in an import
 import melodictionLogo from '/logo_Melodiction_en_cours.png';
 import MelodiesStorage from "../../data/storage/melodies_storage";
 

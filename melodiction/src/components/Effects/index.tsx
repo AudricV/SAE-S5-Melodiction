@@ -5,11 +5,9 @@ import { Box, Button, IconButton, MenuItem, Select, SelectChangeEvent, Typograph
 import { useAudioStore } from '../../store/effectsStore';
 import { SynthType } from '../../tools/synth_types';
 import { VerticalSlider } from './slider';
-import { EffectType } from '../../tools/effect_types';
-import { FilterRollOff } from 'tone';
 import { useMelodyStore } from '../../store/melodyStore';
 import Melody from '../../data/melody';
-import { ChorusEffect, Effect } from '../../tools/effect';
+import { Effect } from '../../tools/effect';
 
 type EffectsItemsProps = {
     melody: Melody;
@@ -43,11 +41,6 @@ export default function EffectsItems(props: EffectsItemsProps) {
         filterEffect,
         distortionEffect,
         synthType,
-        setChorusEffect,
-        setTremoloEffect,
-        setReverbEffect,
-        setFilterEffect,
-        setDistortionEffect,
         setSynthType,
     } = useAudioStore();
 
@@ -253,4 +246,4 @@ export default function EffectsItems(props: EffectsItemsProps) {
             }
         </div>
     );
-};
+}
