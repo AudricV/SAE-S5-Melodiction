@@ -8,7 +8,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <Router>
+    <Router basename="/SAE-S5-Melodiction">
       <App />
     </Router>
   </React.StrictMode>
