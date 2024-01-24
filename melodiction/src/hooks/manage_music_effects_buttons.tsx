@@ -17,46 +17,56 @@ export const useManageMusicEffectsButtons = () => {
         setDistortionEffect,
         synthType,
         setSynthType,
+        soundPlaybackManager
     } = useAudioStore();
 
-    const handheSynthChange = (synth: SynthType) => {
+    const handleSynthChange = (synth: SynthType) => {
         setSynthType(synth);
     }
 
     const handleChorusFrequencyChange = (_e: Event, value: number | number[]) => {
         setChorusEffect({ ...chorusEffect, frequency: value as number });
+        soundPlaybackManager.addOrReplaceSynthEffect(synthType, chorusEffect);
     }
 
     const handleChorusDelayTimeChange = (_e: Event, value: number | number[]) => {
         setChorusEffect({ ...chorusEffect, delayTime: value as number });
+        soundPlaybackManager.addOrReplaceSynthEffect(synthType, chorusEffect);
     }
 
     const handleChorusDepthChange = (_e: Event, value: number | number[]) => {
         setChorusEffect({ ...chorusEffect, depth: value as number });
+        soundPlaybackManager.addOrReplaceSynthEffect(synthType, chorusEffect);
     }
 
     const handleTremoloFrequencyChange = (_e: Event, value: number | number[]) => {
         setTremoloEffect({ ...tremoloEffect, frequency: value as number });
+        soundPlaybackManager.addOrReplaceSynthEffect(synthType, tremoloEffect);
     }
 
     const handleTremoloDepthChange = (_e: Event, value: number | number[]) => {
         setTremoloEffect({ ...tremoloEffect, depth: value as number });
+        soundPlaybackManager.addOrReplaceSynthEffect(synthType, tremoloEffect);
     }
 
     const handleReverbDecayChange = (_e: Event, value: number | number[]) => {
         setReverbEffect({ ...reverbEffect, decay: value as number });
+        soundPlaybackManager.addOrReplaceSynthEffect(synthType, reverbEffect);
     }
 
     const handleFilterFrequencyChange = (_e: Event, value: number | number[]) => {
         setFilterEffect({ ...filterEffect, frequency: value as number });
+        soundPlaybackManager.addOrReplaceSynthEffect(synthType, filterEffect);
     }
 
     const handleFilterRolloffChange = (_e: Event, value: number | number[]) => {
         setFilterEffect({ ...filterEffect, rolloff: value as FilterRollOff });
+        soundPlaybackManager.addOrReplaceSynthEffect(synthType, filterEffect);
     }
 
     const handleDistortionValueChange = (_e: Event, value: number | number[]) => {
         setDistortionEffect({ ...distortionEffect, distortionValue: value as number });
+        soundPlaybackManager.addOrReplaceSynthEffect(synthType, distortionEffect);
     }
 
     const handleResetEffects = () => {
@@ -94,7 +104,7 @@ export const useManageMusicEffectsButtons = () => {
         filterEffect,
         distortionEffect,
         synthType,
-        handheSynthChange,
+        handleSynthChange,
         handleChorusFrequencyChange,
         handleChorusDelayTimeChange,
         handleChorusDepthChange,
