@@ -12,7 +12,7 @@ import { Effect } from '../../tools/effect';
 type EffectsItemsProps = {
     melody: Melody;
     indexMelody: number;
-    handleSynthChange: (synth: SynthType) => void;
+
     handleChorusFrequencyChange: (e: Event, value: number | number[]) => void;
     handleChorusDelayTimeChange: (e: Event, value: number | number[]) => void;
     handleChorusDepthChange: (e: Event, value: number | number[]) => void;
@@ -49,10 +49,6 @@ export default function EffectsItems(props: EffectsItemsProps) {
         localStorage.setItem('stateEffectDrawer', JSON.stringify(!open));
     };
 
-    /**
-     * 
-     * @param effects effects to be applied to the melody
-     */
     const handleEffectsChange = (effects: Map<SynthType, Effect[]>) => {
         setSelectedMelody(new Melody(
             props.melody.getId() ?? "",
@@ -90,7 +86,6 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                 label="Synth"
                                 onChange={(event: SelectChangeEvent<SynthType>) => {
                                     setSynthType(event.target.value as SynthType);
-                                    console.log(event.target.value);
                                 }}
                             >
                                 <MenuItem value={SynthType.SYNTH}>Synth</MenuItem>
@@ -181,14 +176,14 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                     />
                                     <VerticalSlider
                                         name='rolloff'
-                                        value={filterEffect.rolloff ?? -12}
-                                        max={-96}
-                                        step={-12}
+                                        value={filterEffect.rolloff ?? 12}
+                                        max={96}
+                                        step={12}
                                         onChange={(e: Event, newValue: number | number[]) => {
-                                            props.handleFilterRolloffChange(e, newValue);
+                                            props.handleFilterRolloffChange(e, -newValue);
                                         }}
                                         label="RollOff"
-                                        defaultValue={0.0}
+                                        defaultValue={12}
                                     />
                                 </Box>
                             </Box>
