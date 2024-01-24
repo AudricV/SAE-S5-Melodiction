@@ -33,12 +33,6 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
         }
     };
 
-    /**
-     * Add a new melody to the list of melodies.
-     *
-     * @param text the text of the melody
-     * @returns true if the melody has been added, false otherwise
-     */
     const handleTextChange = (text: string) => {
         text = selectedMelody?.getMelodyText() + text;
         const newMelody = selectedMelody;
@@ -47,39 +41,28 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
         soundPlaybackManager.playText(text, 0.25);
     };
 
-    /**
-     * Add a new melody to the list of melodies.
-     *
-     * @returns true if the melody has been added, false otherwise
-     */
     const handlePlayMusic = () => {
         if (selectedMelody && !isPlaying) {
             setIsPlaying(true);
             soundPlaybackManager.setSelectedSynth(synthType);
+            // TODO: try to not apply effects each time the play button is pressed
+            //  This change requires several refactors
+            selectedMelody.getEffects().get(synthType)?.forEach(effect =>
+                soundPlaybackManager.addOrReplaceSynthEffect(synthType, effect));
             soundPlaybackManager.playText(selectedMelody.getMelodyText(), 0.25);
-            console.debug("Playing music");
             setTimeout(() => {
-                console.debug("Stopping music");
                 setIsPlaying(false);
             }, selectedMelody.getMelodyText().length * 0.50 * 1000);
         }
     }
 
-    /**
-     * Stop the music if it is playing.
-     */
     const handleStopMusic = () => {
         if (isPlaying) {
             setIsPlaying(false);
-            // FIXME: Playback doesn't stop properly currently: it seems that when the player is
-            //  started, the sound is being loaded for a moment. Then, when it is stopped, the
-            //  sound is still playing for the loaded time.
             soundPlaybackManager.stopPlayback();
-            console.debug("Stopping music");
         }
     }
 
-    // Get the index of the selected melody in the list of melodies
     const selectedMelodyIndex = melodiesStorage.getMelodiesList()?.findIndex(m => m.getId() === selectedMelody?.getId());
 
     return {
