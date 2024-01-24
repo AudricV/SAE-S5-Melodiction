@@ -94,8 +94,6 @@ export class SoundPlaybackManager {
             return;
         }
 
-        synthData.synth.disconnect();
-
         const previousEffect = this.getEffectFromEffectsSet(synthData, effect.effectType);
 
         if (previousEffect != null) {
@@ -106,8 +104,9 @@ export class SoundPlaybackManager {
                     previousToneEffect.stop();
                 }
                 previousToneEffect.disconnect();
+                previousToneEffect.dispose();
+                synthData.effects.delete(previousEffect);
             }
-            synthData.effects.delete(previousEffect);
         }
 
         const newToneEffect = this.buildToneEffect(effect);
@@ -116,10 +115,8 @@ export class SoundPlaybackManager {
             newToneEffect.start();
         }
 
+        newToneEffect.connect(synthData.synth.context.destination);
         synthData.effects.set(effect, newToneEffect);
-        synthData.effects.forEach(value => {
-            synthData.synth.connect(value);
-        });
     }
 
     /**
@@ -146,17 +143,13 @@ export class SoundPlaybackManager {
             return;
         }
 
-        synthData.synth.disconnect();
         if (toneEffectToDelete instanceof Chorus || toneEffectToDelete instanceof Tremolo) {
             // Some effects require to call stop()
             toneEffectToDelete.stop();
         }
         toneEffectToDelete.disconnect();
+        toneEffectToDelete.dispose();
         synthData.effects.delete(effect);
-
-        synthData.effects.forEach(value => {
-            synthData.synth.connect(value);
-        });
     }
 
     /**
@@ -175,28 +168,28 @@ export class SoundPlaybackManager {
                 return new Chorus(
                     chorusEffect.frequency,
                     chorusEffect.delayTime,
-                    chorusEffect.depth).toDestination();
+                    chorusEffect.depth);
             }
             case EffectType.TREMOLO: {
                 const tremoloEffect = effect as TremoloEffect;
                 return new Tremolo(
                     tremoloEffect.frequency,
-                    tremoloEffect.depth).toDestination();
+                    tremoloEffect.depth);
             }
             case EffectType.REVERB: {
                 const reverbEffect = effect as ReverbEffect;
-                return new Reverb(reverbEffect.decay).toDestination();
+                return new Reverb(reverbEffect.decay);
             }
             case EffectType.FILTER: {
                 const filterEffect = effect as FilterEffect;
                 return new Filter(
                     filterEffect.frequency,
                     filterEffect.type,
-                    filterEffect.rolloff).toDestination();
+                    filterEffect.rolloff);
             }
             case EffectType.DISTORTION: {
                 const distortionEffect = effect as DistortionEffect;
-                return new Distortion(distortionEffect.distortionValue).toDestination();
+                return new Distortion(distortionEffect.distortionValue);
             }
         }
     }
