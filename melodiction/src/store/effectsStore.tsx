@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { ChorusEffect, TremoloEffect, ReverbEffect, FilterEffect, DistortionEffect } from '../tools/effect';
 import { EffectType } from '../tools/effect_types';
 import { SynthType } from '../tools/synth_types';
+import { SoundPlaybackManager } from '../tools/sound_playback_manager';
 
 interface AudioEffectsStore {
     chorusEffect: ChorusEffect;
@@ -10,6 +11,7 @@ interface AudioEffectsStore {
     filterEffect: FilterEffect;
     distortionEffect: DistortionEffect;
     synthType: SynthType;
+    soundPlaybackManager: SoundPlaybackManager;
     setChorusEffect: (effect: ChorusEffect) => void;
     setTremoloEffect: (effect: TremoloEffect) => void;
     setReverbEffect: (effect: ReverbEffect) => void;
@@ -46,6 +48,7 @@ export const useAudioStore = create<AudioEffectsStore>((set) => ({
         distortionValue: 0.5,
     },
     synthType: SynthType.SYNTH,
+    soundPlaybackManager: new SoundPlaybackManager(),
     setChorusEffect: (effect) => set(() => ({ chorusEffect: effect })),
     setTremoloEffect: (effect) => set(() => ({ tremoloEffect: effect })),
     setReverbEffect: (effect) => set(() => ({ reverbEffect: effect })),
