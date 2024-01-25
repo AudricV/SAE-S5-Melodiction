@@ -105,7 +105,8 @@ export class SoundPlaybackManager {
             newToneEffect.start();
         }
 
-        newToneEffect.connect(synthData.synth.context.destination);
+        newToneEffect.toDestination();
+        synthData.synth.connect(newToneEffect);
         synthData.effects.set(effect, newToneEffect);
     }
 
@@ -137,8 +138,12 @@ export class SoundPlaybackManager {
             // Some effects require to call stop()
             toneEffectToDelete.stop();
         }
-        toneEffectToDelete.disconnect();
-        toneEffectToDelete.dispose();
+
+        synthData.synth.disconnect();
+        synthData.effects.forEach(effect => {
+            synthData.synth.connect(effect);
+        });
+
         synthData.effects.delete(effect);
     }
 
