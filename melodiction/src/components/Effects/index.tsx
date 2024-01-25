@@ -230,7 +230,7 @@ export default function EffectsItems(props: EffectsItemsProps) {
                         <Box sx={{ flexDirection: 'row', display: 'flex', alignContent: 'center', justifyContent: 'space-evenly' }}>
                             <Button variant="contained" onClick={() => {
                                 props.handleResetEffects();
-                            }}>Reset</Button>
+                            }}>Réinitialiser</Button>
                         </Box>
                     </Box>
                 )
