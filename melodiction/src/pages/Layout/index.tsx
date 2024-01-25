@@ -10,8 +10,6 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuIcon from '@mui/icons-material/Menu';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
 
 import MainListItems from './ListItems/listItems';
 import { Outlet } from 'react-router-dom';
@@ -108,6 +106,7 @@ const lightTheme = createTheme({
   }
 });
 
+/*
 function DarkModeToggle({ darkMode, toggleDarkMode }: { darkMode: boolean; toggleDarkMode: () => void }) {
   return (
     <IconButton color="inherit" onClick={toggleDarkMode}>
@@ -123,6 +122,7 @@ function DarkModeToggle({ darkMode, toggleDarkMode }: { darkMode: boolean; toggl
     </IconButton>
   );
 }
+*/
 
 export type LayoutProps = {
   melodiesStorage: MelodiesStorage
@@ -130,7 +130,7 @@ export type LayoutProps = {
 
 export default function Layout({ melodiesStorage }: LayoutProps) {
   const isDarkMode = localStorage.getItem('darkMode') !== 'false';
-  const [darkMode, setDarkMode] = useState(isDarkMode);
+  const [darkMode] = useState(isDarkMode);
 
   const isDrawerOpen = localStorage.getItem('stateDrawer');
   const [open, setOpen] = useState(isDrawerOpen === 'true');
@@ -140,11 +140,11 @@ export default function Layout({ melodiesStorage }: LayoutProps) {
     localStorage.setItem('stateDrawer', JSON.stringify(!open));
   };
 
-  const toggleDarkMode = () => {
+  /*const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
     localStorage.setItem('darkMode', JSON.stringify(newDarkMode));
-  };
+  };*/
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
@@ -171,7 +171,7 @@ export default function Layout({ melodiesStorage }: LayoutProps) {
               </IconButton>
             </Tooltip>
 
-            <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+            {/* <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} /> */}
 
           </Toolbar>
         </AppBar>

@@ -26,6 +26,7 @@ const MelodyPage = ({ melodiesStorage }: MelodyPageProps) => {
     } = useManageMusic(melodiesStorage);
 
     const {
+        handleSynthChange,
         handleChorusFrequencyChange,
         handleChorusDelayTimeChange,
         handleChorusDepthChange,
@@ -63,6 +64,7 @@ const MelodyPage = ({ melodiesStorage }: MelodyPageProps) => {
                     </Stack>
                     <Box sx={{ display: 'flex', bottom: '0', position: 'absolute', alignContent: 'center', flexDirection: 'column' }}>
                         <EffectsItems melody={selectedMelody} indexMelody={selectedMelodyIndex ?? -1}
+                            handleSynthChange={handleSynthChange}
                             handleChorusDelayTimeChange={handleChorusDelayTimeChange}
                             handleChorusDepthChange={handleChorusDepthChange}
                             handleChorusFrequencyChange={handleChorusFrequencyChange}
