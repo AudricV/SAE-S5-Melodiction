@@ -21,6 +21,7 @@ export const useManageMusicEffectsButtons = () => {
     } = useAudioStore();
 
     const handleSynthChange = (synth: SynthType) => {
+        soundPlaybackManager.stopPlayback();
         setSynthType(synth);
     }
 
