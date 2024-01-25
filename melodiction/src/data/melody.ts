@@ -11,11 +11,11 @@ import {Effect} from "../tools/effect.ts";
  */
 export default class Melody {
 
-    private id: string;
+    private readonly id: string;
     private name: string;
     private melodyText: string;
     private lastModifiedTimestamp: number;
-    private effects: Map<SynthType, Effect[]>;
+    private readonly effects: Map<SynthType, readonly Effect[]>;
 
     /**
      * Constructs a new {@link Melody} instance.
@@ -34,7 +34,7 @@ export default class Melody {
                 name: string,
                 melodyText: string,
                 lastModifiedTimestamp: number,
-                effects: Map<SynthType, Effect[]>) {
+                effects: Map<SynthType, readonly Effect[]>) {
         this.id = id;
         this.name = name;
         this.melodyText = melodyText;
