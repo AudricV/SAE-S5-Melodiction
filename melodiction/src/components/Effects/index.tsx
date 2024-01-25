@@ -89,8 +89,8 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                 }}
                             >
                                 <MenuItem value={SynthType.SYNTH}>Synth</MenuItem>
-                                <MenuItem value={SynthType.FM_SYNTH}>FM_SYNTH</MenuItem>
-                                <MenuItem value={SynthType.PLUCK}>PLUCK</MenuItem>
+                                <MenuItem value={SynthType.FM_SYNTH}>FM Synth</MenuItem>
+                                <MenuItem value={SynthType.PLUCK}>Pluck Synth</MenuItem>
 
                             </Select>
                         </Box>
