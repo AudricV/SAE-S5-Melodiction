@@ -129,7 +129,7 @@ export type LayoutProps = {
 }
 
 export default function Layout({ melodiesStorage }: LayoutProps) {
-  const isDarkMode = localStorage.getItem('darkMode') === 'true';
+  const isDarkMode = localStorage.getItem('darkMode') !== 'false';
   const [darkMode, setDarkMode] = useState(isDarkMode);
 
   const isDrawerOpen = localStorage.getItem('stateDrawer');
