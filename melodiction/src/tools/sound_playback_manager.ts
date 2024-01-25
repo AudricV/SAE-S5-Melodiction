@@ -13,7 +13,6 @@ import {EffectType} from "./effect_types";
 export class SoundPlaybackManager {
     private synths: Map<SynthType, SynthData>;
     private selectedSynthType: SynthType;
-    private currentSequence: Tone.Sequence | null = null;
 
     /**
      * Constructs a new {@link SoundPlaybackManager} instance.
@@ -31,36 +30,27 @@ export class SoundPlaybackManager {
      * @param noteDuration - the duration of each note in seconds
      */
     public playText(text: string, noteDuration: number) {
+        this.stopPlayback();
         const selectedSynth = this.getSelectedSynth();
         if (selectedSynth) {
-            this.stopPlayback();
-
             let startTime = 0;
-            const events = [];
+            let charactersPlayedCount = 0;
+            // FIXME: sometimes the Start time must be strictly greater than previous start time
+            //  error is thrown
             for (const character of text) {
                 const noteToPlay = convertLetterToNote(character);
                 if (noteToPlay != null) {
-                    events.push({
-                        note: noteToPlay,
-                        beginTime: startTime
-                    });
+                    Tone.Transport.schedule((time) => {
+                        selectedSynth.triggerAttackRelease(noteToPlay, noteDuration, time);
+                    }, startTime);
                     startTime += noteDuration;
+                    charactersPlayedCount += 1;
                 }
             }
 
-            if (events.length === 0) {
-                return;
+            if (charactersPlayedCount != 0) {
+                this.startPlayback();
             }
-
-            this.currentSequence = new Tone.Sequence({
-                loop: false,
-                callback: (_time, note) => {
-                    selectedSynth.triggerAttackRelease(note.note, noteDuration, Tone.now() + note.beginTime);
-                },
-                events: events
-            });
-
-            this.startPlayback();
         }
     }
 
@@ -244,9 +234,6 @@ export class SoundPlaybackManager {
      * Start playback of the current sequence, if there is one.
      */
     private startPlayback() : void {
-        if (this.currentSequence != null) {
-            this.currentSequence.start();
-        }
         Tone.Transport.start();
     }
 
@@ -254,11 +241,6 @@ export class SoundPlaybackManager {
      * Stop playback of the current sequence playing, if there is one.
      */
     public stopPlayback() : void {
-        // TODO: stop doesn't work properly
-        if (this.currentSequence != null) {
-            this.currentSequence.stop();
-            this.currentSequence.clear();
-        }
         Tone.Transport.stop();
     }
 
