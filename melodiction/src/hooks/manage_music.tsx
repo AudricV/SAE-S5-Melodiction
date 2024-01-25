@@ -38,7 +38,7 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
         const newMelody = selectedMelody;
         newMelody?.setMelodyText(text);
         setSelectedMelody(newMelody);
-        soundPlaybackManager.playText(text, 0.25);
+        soundPlaybackManager.playText(text, 0.16);
     };
 
     const handlePlayMusic = () => {
@@ -49,7 +49,7 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
             //  This change requires several refactors
             selectedMelody.getEffects().get(synthType)?.forEach(effect =>
                 soundPlaybackManager.addOrReplaceSynthEffect(synthType, effect));
-            soundPlaybackManager.playText(selectedMelody.getMelodyText(), 0.25);
+            soundPlaybackManager.playText(selectedMelody.getMelodyText(), 0.16);
             setTimeout(() => {
                 setIsPlaying(false);
             }, selectedMelody.getMelodyText().length * 0.50 * 1000);
