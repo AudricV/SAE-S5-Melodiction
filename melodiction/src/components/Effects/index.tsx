@@ -109,7 +109,7 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                         onChange={(e: Event, newValue: number | number[]) => {
                                             props.handleChorusFrequencyChange(e, newValue);
                                         }}
-                                        label="Frequency"
+                                        label="Fréquence"
                                         defaultValue={10}
                                     />
                                     <VerticalSlider
@@ -120,7 +120,7 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                         onChange={(e: Event, newValue: number | number[]) => {
                                             props.handleChorusDepthChange(e, newValue);
                                         }}
-                                        label="Depth"
+                                        label="Intensité"
                                         defaultValue={0.0}
                                     />
                                 </Box>
@@ -139,7 +139,7 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                         onChange={(e: Event, newValue: number | number[]) => {
                                             props.handleTremoloFrequencyChange(e, newValue);
                                         }}
-                                        label="Frequency"
+                                        label="Fréquence"
                                         defaultValue={10}
                                     />
                                     <VerticalSlider
@@ -150,7 +150,7 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                         onChange={(e: Event, newValue: number | number[]) => {
                                             props.handleTremoloDepthChange(e, newValue);
                                         }}
-                                        label="Depth"
+                                        label="Intensité"
                                         defaultValue={0.0}
                                     />
                                 </Box>
@@ -171,7 +171,7 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                         onChange={(e: Event, newValue: number | number[]) => {
                                             props.handleFilterFrequencyChange(e, newValue);
                                         }}
-                                        label="Frequency"
+                                        label="Fréquence"
                                         defaultValue={10}
                                     />
                                 </Box>
@@ -191,7 +191,7 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                         onChange={(e: Event, newValue: number | number[]) => {
                                             props.handleDistortionValueChange(e, newValue);
                                         }}
-                                        label="Amount"
+                                        label="Valeur"
                                         defaultValue={0.0}
                                     />
                                 </Box>
@@ -210,7 +210,7 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                         onChange={(e: Event, newValue: number | number[]) => {
                                             props.handleReverbDecayChange(e, newValue);
                                         }}
-                                        label="Decay"
+                                        label="Distorsion"
                                         defaultValue={0.0}
                                     />
                                 </Box>
