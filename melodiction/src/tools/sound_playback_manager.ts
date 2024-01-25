@@ -11,6 +11,8 @@ import {EffectType} from "./effect_types";
  * A class managing all synths used and playback of notes.
  */
 export class SoundPlaybackManager {
+    private static readonly SYNTHS_VOLUME: number = 15;
+
     private synths: Map<SynthType, SynthData>;
     private selectedSynthType: SynthType;
 
@@ -223,19 +225,19 @@ export class SoundPlaybackManager {
     private buildSynths() : void {
         this.synths.set(SynthType.SYNTH, {
             synth: new Tone.Synth({
-                volume: 10
+                volume: SoundPlaybackManager.SYNTHS_VOLUME
             }).toDestination(),
             effects: new Map<Effect, EffectNode>(),
         });
         this.synths.set(SynthType.FM_SYNTH, {
             synth: new Tone.FMSynth({
-                volume: 10
+                volume: SoundPlaybackManager.SYNTHS_VOLUME
             }).toDestination(),
             effects: new Map<Effect, EffectNode>()
         });
         this.synths.set(SynthType.PLUCK, {
             synth: new Tone.PluckSynth({
-                volume: 10
+                volume: SoundPlaybackManager.SYNTHS_VOLUME
             }).toDestination(),
             effects: new Map<Effect, EffectNode>()
         });
