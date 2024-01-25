@@ -222,15 +222,21 @@ export class SoundPlaybackManager {
      */
     private buildSynths() : void {
         this.synths.set(SynthType.SYNTH, {
-            synth: new Tone.Synth().toDestination(),
-            effects: new Map<Effect, EffectNode>()
+            synth: new Tone.Synth({
+                volume: 10
+            }).toDestination(),
+            effects: new Map<Effect, EffectNode>(),
         });
         this.synths.set(SynthType.FM_SYNTH, {
-            synth: new Tone.FMSynth().toDestination(),
+            synth: new Tone.FMSynth({
+                volume: 10
+            }).toDestination(),
             effects: new Map<Effect, EffectNode>()
         });
         this.synths.set(SynthType.PLUCK, {
-            synth: new Tone.PluckSynth().toDestination(),
+            synth: new Tone.PluckSynth({
+                volume: 10
+            }).toDestination(),
             effects: new Map<Effect, EffectNode>()
         });
     }
