@@ -12,7 +12,7 @@ import { Effect } from '../../tools/effect';
 type EffectsItemsProps = {
     melody: Melody;
     indexMelody: number;
-
+    handleSynthChange: (synth: SynthType) => void;
     handleChorusFrequencyChange: (e: Event, value: number | number[]) => void;
     handleChorusDelayTimeChange: (e: Event, value: number | number[]) => void;
     handleChorusDepthChange: (e: Event, value: number | number[]) => void;
@@ -41,7 +41,6 @@ export default function EffectsItems(props: EffectsItemsProps) {
         filterEffect,
         distortionEffect,
         synthType,
-        setSynthType,
     } = useAudioStore();
 
     const toggleDrawer = () => {
@@ -82,10 +81,10 @@ export default function EffectsItems(props: EffectsItemsProps) {
                         </IconButton>
                         <Box sx={{ height: 50, flexDirection: 'row', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', marginBottom: '10px' }}>
                             <Select
-                                value={synthType}
+                                value={synthType ?? SynthType.SYNTH}
                                 label="Synth"
                                 onChange={(event: SelectChangeEvent<SynthType>) => {
-                                    setSynthType(event.target.value as SynthType);
+                                    props.handleSynthChange(event.target.value as SynthType);
                                 }}
                             >
                                 <MenuItem value={SynthType.SYNTH}>Synth</MenuItem>
