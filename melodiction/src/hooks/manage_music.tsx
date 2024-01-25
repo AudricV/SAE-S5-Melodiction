@@ -54,7 +54,7 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
             soundPlaybackManager.playText(selectedMelody.getMelodyText(), tempo);
             setTimeout(() => {
                 setIsPlaying(false);
-            }, selectedMelody.getMelodyText().length * (tempo * 2.5) * 1000);
+            }, selectedMelody.getMelodyText().length * (tempo *  1.2) * 1000);
         }
     }
 

@@ -61,7 +61,7 @@ function TextScreen(props: TextScreenProps) {
                                 props.onMusicPlay();
                                 setTimeout(() => {
                                     setIsPlaying(false);
-                                }, props.melody.getMelodyText().length * (tempo * 2.5) * 1000);
+                                }, props.melody.getMelodyText().length * (tempo * 1.2) * 1000);
                             }
                             }>
                                 <PlayArrowIcon />
