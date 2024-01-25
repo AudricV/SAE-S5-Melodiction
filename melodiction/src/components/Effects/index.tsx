@@ -174,17 +174,6 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                         label="Frequency"
                                         defaultValue={10}
                                     />
-                                    <VerticalSlider
-                                        name='rolloff'
-                                        value={filterEffect.rolloff ?? 12}
-                                        max={96}
-                                        step={12}
-                                        onChange={(e: Event, newValue: number | number[]) => {
-                                            props.handleFilterRolloffChange(e, -newValue);
-                                        }}
-                                        label="RollOff"
-                                        defaultValue={12}
-                                    />
                                 </Box>
                             </Box>
                             <Box
