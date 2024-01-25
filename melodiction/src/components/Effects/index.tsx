@@ -187,6 +187,7 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                         name='distortionValue'
                                         value={distortionEffect.distortionValue ?? 0.0}
                                         max={1.0}
+                                        min={0.1}
                                         step={0.1}
                                         onChange={(e: Event, newValue: number | number[]) => {
                                             props.handleDistortionValueChange(e, newValue);
