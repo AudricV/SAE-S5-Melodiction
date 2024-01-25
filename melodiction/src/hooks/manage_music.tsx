@@ -3,6 +3,8 @@ import { useMelodyStore } from "../store/melodyStore";
 import MelodiesStorage from "../data/storage/melodies_storage";
 import { useAudioStore } from "../store/effectsStore";
 
+export const tempo = 0.16 ;
+
 export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
     const { selectedMelody, setSelectedMelody } = useMelodyStore();
 
@@ -38,7 +40,7 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
         const newMelody = selectedMelody;
         newMelody?.setMelodyText(text);
         setSelectedMelody(newMelody);
-        soundPlaybackManager.playText(text, 0.16);
+        soundPlaybackManager.playText(text, tempo);
     };
 
     const handlePlayMusic = () => {
@@ -49,10 +51,10 @@ export const useManageMusic = (melodiesStorage: MelodiesStorage) => {
             //  This change requires several refactors
             selectedMelody.getEffects().get(synthType)?.forEach(effect =>
                 soundPlaybackManager.addOrReplaceSynthEffect(synthType, effect));
-            soundPlaybackManager.playText(selectedMelody.getMelodyText(), 0.16);
+            soundPlaybackManager.playText(selectedMelody.getMelodyText(), tempo);
             setTimeout(() => {
                 setIsPlaying(false);
-            }, selectedMelody.getMelodyText().length * 0.50 * 1000);
+            }, selectedMelody.getMelodyText().length * (tempo * 2.5) * 1000);
         }
     }
 

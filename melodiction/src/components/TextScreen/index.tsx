@@ -7,6 +7,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import CancelIcon from "@mui/icons-material/Cancel";
 import TextField from "@mui/material/TextField";
 import Melody from "../../data/melody";
+import { tempo } from "../../hooks/manage_music";
 
 type TextScreenProps = {
     melody: Melody;
@@ -60,8 +61,7 @@ function TextScreen(props: TextScreenProps) {
                                 props.onMusicPlay();
                                 setTimeout(() => {
                                     setIsPlaying(false);
-                                }, props.melody.getMelodyText().length * 0.50 * 1000);
-
+                                }, props.melody.getMelodyText().length * (tempo * 2.5) * 1000);
                             }
                             }>
                                 <PlayArrowIcon />
