@@ -211,7 +211,7 @@ export default function EffectsItems(props: EffectsItemsProps) {
                                             props.handleReverbDecayChange(e, newValue);
                                         }}
                                         label="Distorsion"
-                                        defaultValue={0.0}
+                                        defaultValue={0.01}
                                     />
                                 </Box>
                             </Box>
